@@ -3,29 +3,13 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Rethinking Google — product proposals</title>
-<link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500&family=Google+Sans+Text:wght@400&display=swap" rel="stylesheet" />
-<style>
-  :root { --fg: #202124; --sub: #5f6368; --line: #dadce0; --blue: #1a73e8; }
-  * { box-sizing: border-box; }
-  body { margin: 0; background: #fff; color: var(--fg); font-family: "Google Sans Text", Roboto, sans-serif; min-height: 100vh; padding: 16vh 8vw; }
-  p.k { font-family: "Google Sans", sans-serif; font-weight: 500; font-size: 14px; color: var(--blue); margin: 0 0 20px; }
-  h1 { font-family: "Google Sans", sans-serif; font-weight: 400; font-size: clamp(40px, 6vw, 84px); line-height: 1.06; letter-spacing: -.035em; margin: 0 0 8vh; }
-  h1 em { font-style: normal; color: var(--sub); }
-  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 16px; }
-  a.card { text-decoration: none; color: inherit; border: 1px solid var(--line); border-radius: 16px; padding: 28px; transition: box-shadow .25s, border-color .25s; }
-  a.card:hover { border-color: transparent; box-shadow: 0 1px 3px rgba(60,64,67,.2), 0 6px 20px rgba(60,64,67,.15); }
-  .card small { font-family: "Google Sans", sans-serif; font-weight: 500; font-size: 13px; color: var(--blue); }
-  .card h2 { font-family: "Google Sans", sans-serif; font-weight: 400; font-size: 30px; margin: 12px 0 6px; }
-  .card p { color: var(--sub); line-height: 1.6; margin: 0; }
-</style>
+<title>Rethinking Google</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500&family=Google+Sans+Text:wght@400;500&family=Roboto+Mono:wght@500&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="site.css" />
 </head>
-<body>
-  <p class="k">Product proposals · 2026</p>
-  <h1>Rethinking Google,<br/><em>one product at a time.</em></h1>
-  <div class="grid">
-    <a class="card" href="youtube-unhooked/"><small>01 · YouTube</small><h2>Unhooked</h2><p>Optimize recommendations for regret, not watch time.</p></a>
-    <a class="card" href="meet-rehearsed/"><small>02 · Google Meet</small><h2>Rehearsed</h2><p>Move the post-mortem before the meeting.</p></a>
-  </div>
+<body data-page="list">
+<script type="module" src="site.js"></script>
 </body>
 </html>

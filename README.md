@@ -16,3 +16,17 @@ npx -y http-server . -p 5173 -c-1
 ```
 
 Open http://localhost:5173. Every demo works without keys (cached and sample data); add a Gemini or YouTube Data API key under **Data sources** in each demo for live data. Keys stay in your browser.
+
+## Projects page
+
+The root `index.html` is a projects summary (English / 中文), and `project.html?id=…` is each project's detail page. Both render from [`projects.js`](projects.js).
+
+To add a project:
+
+1. Build the demo in its own folder, e.g. `maps-xyz/`.
+2. Add an entry to `PROJECTS` in `projects.js` (every text field is `{ en, zh }`).
+3. Add its two cover shots to `SHOTS` in [`tools/capture.mjs`](tools/capture.mjs), serve the repo on :5173, then run:
+
+```bash
+cd tools && npm install && cd .. && node tools/capture.mjs maps-xyz
+```
