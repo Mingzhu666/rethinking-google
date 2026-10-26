@@ -19,12 +19,12 @@ Open http://localhost:5173. Every demo works without keys (cached and sample dat
 
 ## Projects page
 
-The root `index.html` is a projects summary (English / 中文), and `project.html?id=…` is each project's detail page. Both render from [`projects.js`](projects.js).
+The root `index.html` is a projects summary, and `project.html?id=…` is each project's detail page. Both render from [`projects.js`](projects.js).
 
 To add a project:
 
 1. Build the demo in its own folder, e.g. `maps-xyz/`.
-2. Add an entry to `PROJECTS` in `projects.js` (every text field is `{ en, zh }`).
+2. Add an entry to `PROJECTS` in `projects.js`.
 3. Add its two cover shots to `SHOTS` in [`tools/capture.mjs`](tools/capture.mjs), serve the repo on :5173, then run:
 
 ```bash

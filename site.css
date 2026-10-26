@@ -21,8 +21,6 @@ a { color: inherit; }
 .site-nav { display: flex; gap: 22px; margin-left: auto; font: 14px var(--sans); }
 .site-nav a { text-decoration: none; color: var(--copy); }
 .site-nav a:hover, .site-nav a.on { color: var(--fg); }
-.lang { font: 500 13px var(--sans); color: var(--copy); background: var(--inset); border: 1px solid var(--line); border-radius: 999px; padding: 6px 12px; cursor: pointer; }
-.lang:hover { color: var(--fg); border-color: var(--line-strong); }
 
 /* Page head */
 .page-head { padding: 72px 0 40px; }

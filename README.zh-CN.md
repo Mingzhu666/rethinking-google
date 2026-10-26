@@ -19,12 +19,12 @@ npx -y http-server . -p 5173 -c-1
 
 ## 项目汇总页
 
-根目录的 `index.html` 是项目汇总页（English / 中文），`project.html?id=…` 是每个项目的详情页，两者都从 [`projects.js`](projects.js) 读取数据。
+根目录的 `index.html` 是项目汇总页（英文），`project.html?id=…` 是每个项目的详情页，两者都从 [`projects.js`](projects.js) 读取数据。
 
 添加新项目：
 
 1. 在独立文件夹里做好演示，例如 `maps-xyz/`。
-2. 在 `projects.js` 的 `PROJECTS` 里加一条数据（所有文字字段都是 `{ en, zh }`）。
+2. 在 `projects.js` 的 `PROJECTS` 里加一条英文数据。
 3. 在 [`tools/capture.mjs`](tools/capture.mjs) 的 `SHOTS` 里配置两张封面，在 5173 端口启动本地服务后运行：
 
 ```bash
