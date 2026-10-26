@@ -95,7 +95,7 @@ date: ${clues.date.text}
 weather: ${clues.weather.text}
 birthday: ${clues.birthday.text}
 wiki: ${clues.wiki.text}
-For each clue, design one video: a YouTube search query likely to surface a thoughtful, long-form video (no clickbait), and one line for the viewer explaining "why you're seeing this today" — second person, like a slightly poetic friend, max 22 words, in English.
+For each clue, design one video: a short YouTube search query (2–5 words, concrete nouns, no dates or numbers unless essential) likely to surface a thoughtful, long-form video (no clickbait), and one line for the viewer explaining "why you're seeing this today" — second person, like a slightly poetic friend, max 22 words, in English.
 Return JSON only: {"items": [{"clue": "date|weather|birthday|wiki", "query": string, "why": string}]}`;
   const plan = await gemini('Gemini blind box curator', prompt, () => ({ items: [
     { clue: 'date', query: `${dateLabel} on this day in history documentary`, why: `A lot has happened on ${dateLabel}. Today you're standing on the same date as all of it.` },
@@ -105,9 +105,11 @@ Return JSON only: {"items": [{"clue": "date|weather|birthday|wiki", "query": str
   ] }));
 
   const items = await Promise.all(plan.data.items.slice(0, 4).map(async it => {
-    const r = await ytSearch({ q: it.query, maxResults: 1, videoDuration: 'medium', safeSearch: 'strict', relevanceLanguage: 'en' },
-      () => mockVideos(it.query, 1, { titles: [it.query], queries: [it.query] })
-        .map(v => ({ ...v, channel: 'YouTube search', views: null, thumbText: THUMB[it.clue] || 'Blind box' })));
+    const sample = () => mockVideos(it.query, 1, { titles: [it.query], queries: [it.query] })
+      .map(v => ({ ...v, channel: 'YouTube search', views: null, thumbText: THUMB[it.clue] || 'Blind box' }));
+    // Strict first; if nothing comes back, retry with a shorter query and no duration filter
+    let r = await ytSearch({ q: it.query, maxResults: 1, videoDuration: 'medium', safeSearch: 'strict', relevanceLanguage: 'en' }, () => null);
+    if (!r.data?.length) r = await ytSearch({ q: it.query.split(/\s+/).slice(0, 4).join(' '), maxResults: 1, safeSearch: 'strict' }, sample);
     return { ...it, video: r.data[0], source: r.source };
   }));
 

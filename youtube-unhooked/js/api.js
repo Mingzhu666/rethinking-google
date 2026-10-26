@@ -31,11 +31,11 @@ export function clearCache() {
 }
 
 // Try live; on failure fall back to cache, then to sample data
-async function tiered(name, cacheId, liveFn, mockFn) {
+async function tiered(name, cacheId, liveFn, mockFn, timeout = 9000) {
   const keys = getKeys();
   if (!keys.offline) {
     try {
-      const data = await withTimeout(liveFn(), 9000);
+      const data = await withTimeout(liveFn(), timeout);
       cacheSet(cacheId, data);
       mark(name, 'live');
       return { data, source: 'live' };
@@ -89,23 +89,36 @@ function isoDur(iso) {
 }
 
 // ---------- Gemini API ----------
+// Model names get retired often, so try a chain: the user's choice first, then fast fallbacks.
+const GEMINI_MODELS = ['gemini-3.5-flash-lite', 'gemini-flash-lite-latest', 'gemini-flash-latest'];
+
 export async function gemini(name, prompt, mockFn) {
   const id = 'gm:' + hash(prompt);
   return tiered(name, id, async () => {
     const { gm, model } = getKeys();
     if (!gm) throw new Error('no gemini key');
-    const m = model || 'gemini-2.5-flash';
-    const res = await getJSON(`https://generativelanguage.googleapis.com/v1beta/models/${m}:generateContent?key=${gm}`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        contents: [{ parts: [{ text: prompt }] }],
-        generationConfig: { responseMimeType: 'application/json', temperature: 0.7 },
-      }),
-    });
-    const text = res.candidates?.[0]?.content?.parts?.map(p => p.text).join('') || '';
-    return JSON.parse(text);
-  }, mockFn);
+    const chain = [...new Set([model, ...GEMINI_MODELS].filter(Boolean))];
+    let lastErr;
+    for (const m of chain) {
+      try {
+        const res = await getJSON(`https://generativelanguage.googleapis.com/v1beta/models/${m}:generateContent?key=${gm}`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          signal: AbortSignal.timeout(20000),
+          body: JSON.stringify({
+            contents: [{ parts: [{ text: prompt }] }],
+            generationConfig: { responseMimeType: 'application/json', temperature: 0.7 },
+          }),
+        });
+        const text = res.candidates?.[0]?.content?.parts?.map(p => p.text).join('') || '';
+        return JSON.parse(text);
+      } catch (e) {
+        lastErr = e;
+        console.warn(`[gemini] ${m} failed:`, e.message);
+      }
+    }
+    throw lastErr;
+  }, mockFn, 45000);
 }
 
 // ---------- Free public APIs (no key needed) ----------
