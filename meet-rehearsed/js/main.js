@@ -11,9 +11,9 @@ function heroLanes() {
   const sim = simulate(SAMPLE_MEETING);
   const span = sim.total + 2;
   const pct = t => `${(t / span) * 100}%`;
-  $('#hero-lanes').innerHTML = SAMPLE_MEETING.people.map(p => `<div class="hl">${
+  $('#hero-lanes').innerHTML = SAMPLE_MEETING.people.map(p => `<div class="hl" data-name="${p.name.split(' ')[0]}">${
     sim.segments.filter(s => s.who === p.id).map(s => `<span style="left:${pct(s.s)};width:${pct(s.e - s.s)};background:${p.color}"></span>`).join('')}</div>`).join('') +
-    `<div class="redzone" style="left:${pct(sim.failAt)};right:0"></div><div class="playhead"></div>`;
+    `<div class="track"><div class="redzone" style="left:${pct(sim.failAt)}"><b>Decision fails here</b></div><div class="playhead"></div></div>`;
   $('#hero-fail').dataset.count = sim.failAt;
   return sim.failAt;
 }

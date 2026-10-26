@@ -4,21 +4,20 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Rethinking Google — product proposals</title>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,900&family=Geist:wght@400;500&family=IBM+Plex+Mono:wght@400&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500&family=Google+Sans+Text:wght@400&display=swap" rel="stylesheet" />
 <style>
-  :root { --ink: #0b0a09; --bone: #efe8da; --dim: #a59e90; --line: rgba(239,232,218,.12); --calm: #9dffcf; }
+  :root { --fg: #202124; --sub: #5f6368; --line: #dadce0; --blue: #1a73e8; }
   * { box-sizing: border-box; }
-  body { margin: 0; background: var(--ink); color: var(--bone); font-family: Geist, sans-serif; min-height: 100vh; padding: 14vh 8vw; }
-  p.k { font-family: "IBM Plex Mono", monospace; font-size: 13px; color: var(--dim); margin: 0 0 24px; }
-  h1 { font-family: Fraunces, serif; font-weight: 900; font-size: clamp(44px, 7vw, 104px); line-height: 1; letter-spacing: -.03em; margin: 0 0 8vh; }
-  h1 em { font-family: "Instrument Serif", serif; font-weight: 400; color: var(--calm); }
-  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 20px; }
-  a.card { text-decoration: none; color: inherit; border: 1px solid var(--line); border-radius: 22px; padding: 30px; transition: transform .3s, border-color .3s, background .3s; }
-  a.card:hover { transform: translateY(-4px); border-color: var(--calm); background: rgba(157,255,207,.04); }
-  .card small { font-family: "IBM Plex Mono", monospace; color: var(--dim); }
-  .card h2 { font-family: Fraunces, serif; font-size: 34px; margin: 14px 0 8px; }
-  .card p { color: var(--dim); line-height: 1.6; margin: 0; }
-  .card .soon { opacity: .4; }
+  body { margin: 0; background: #fff; color: var(--fg); font-family: "Google Sans Text", Roboto, sans-serif; min-height: 100vh; padding: 16vh 8vw; }
+  p.k { font-family: "Google Sans", sans-serif; font-weight: 500; font-size: 14px; color: var(--blue); margin: 0 0 20px; }
+  h1 { font-family: "Google Sans", sans-serif; font-weight: 400; font-size: clamp(40px, 6vw, 84px); line-height: 1.06; letter-spacing: -.035em; margin: 0 0 8vh; }
+  h1 em { font-style: normal; color: var(--sub); }
+  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 16px; }
+  a.card { text-decoration: none; color: inherit; border: 1px solid var(--line); border-radius: 16px; padding: 28px; transition: box-shadow .25s, border-color .25s; }
+  a.card:hover { border-color: transparent; box-shadow: 0 1px 3px rgba(60,64,67,.2), 0 6px 20px rgba(60,64,67,.15); }
+  .card small { font-family: "Google Sans", sans-serif; font-weight: 500; font-size: 13px; color: var(--blue); }
+  .card h2 { font-family: "Google Sans", sans-serif; font-weight: 400; font-size: 30px; margin: 12px 0 6px; }
+  .card p { color: var(--sub); line-height: 1.6; margin: 0; }
 </style>
 </head>
 <body>
