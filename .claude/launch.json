@@ -2,9 +2,9 @@
   "version": "0.0.1",
   "configurations": [
     {
-      "name": "youtube-unhooked",
+      "name": "google-showcase",
       "runtimeExecutable": "npx",
-      "runtimeArgs": ["-y", "http-server", "/Users/yanchao/Documents/google优化项目/youtube-unhooked", "-p", "5173", "-c-1", "--silent"],
+      "runtimeArgs": ["-y", "http-server", "/Users/yanchao/Documents/google优化项目", "-p", "5173", "-c-1", "--silent"],
       "port": 5173
     }
   ]

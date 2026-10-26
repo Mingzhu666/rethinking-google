@@ -1,0 +1,235 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Meet, Rehearsed — Move the post-mortem before the meeting</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700;9..144,900&family=Geist:wght@400;500;700;900&family=IBM+Plex+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="css/shell.css" />
+<link rel="stylesheet" href="css/app.css" />
+</head>
+<body>
+<div class="grain" aria-hidden="true"></div>
+
+<header class="topbar">
+  <a class="brand" href="#hero"><span class="brand-dot"></span>Rehearsed <em>for Google Meet</em></a>
+  <nav class="chapters" aria-label="Chapters">
+    <a href="#problem">00 Problem</a>
+    <a href="#ch-sim">01 Simulate</a>
+    <a href="#ch-rehearse">02 Rehearse</a>
+    <a href="#ch-mirror">03 Mirror</a>
+    <a href="#ch-metric">04 New metric</a>
+  </nav>
+  <button class="pill-btn" id="open-settings" aria-label="Data sources">
+    <span class="status-dot" id="global-status"></span><span id="global-status-text">Data sources</span>
+  </button>
+</header>
+
+<main>
+<!-- HERO -->
+<section id="hero" class="stop hero">
+  <div class="hero-lanes" id="hero-lanes" aria-hidden="true"></div>
+  <div class="hero-inner">
+    <p class="kicker reveal">A product proposal for Google Meet · 2026</p>
+    <h1 class="hero-title reveal">This meeting will fail at minute <span class="num trap" id="hero-fail" data-count="30">0</span>.</h1>
+    <h2 class="hero-sub reveal" style="--d:1.4s">We can tell you before it starts.</h2>
+  </div>
+  <div class="scroll-cue">Scroll · or press <kbd>→</kbd> to begin</div>
+</section>
+
+<!-- PROBLEM -->
+<section id="problem" class="stop chapter">
+  <p class="kicker reveal">Every AI meeting feature today</p>
+  <div class="after-list reveal">
+    <span>Take notes for me</span><span>Summarize the call</span><span>Extract action items</span><span>Send a recap</span><span>Catch me up</span>
+  </div>
+  <p class="lede reveal">…works <span class="trap">after</span> the meeting.<br/>By then, the meeting has already failed.</p>
+</section>
+
+<section id="objective" class="stop chapter">
+  <p class="kicker reveal">Insight: most meeting failures are visible in the invite</p>
+  <div class="objective reveal">
+    <div class="obj-line old"><span class="kw">post</span>-mortem: record what went wrong</div>
+    <div class="obj-line new"><span class="kw">pre</span>-mortem: prevent it from going wrong</div>
+  </div>
+  <p class="lede small reveal">A hard stop in someone's calendar. A decision scheduled for minute 40. The one person who always talks, and the one who never does. <b>It's all there before anyone joins.</b></p>
+  <div class="trio reveal">
+    <a href="#ch-sim" class="trio-card"><span>01</span><h3>Simulate</h3><p>Watch the meeting fail, then fix the agenda.</p></a>
+    <a href="#ch-rehearse" class="trio-card"><span>02</span><h3>Rehearse</h3><p>Hear the hardest questions before the room asks them.</p></a>
+    <a href="#ch-mirror" class="trio-card"><span>03</span><h3>Mirror</h3><p>A private game-film review of how you showed up.</p></a>
+  </div>
+</section>
+
+<!-- 01 SIMULATE -->
+<section id="ch-sim" class="stop chapter chapter-intro">
+  <span class="ch-no">01</span>
+  <h2 class="ch-title reveal">Run the meeting <span class="calm">before you run the meeting.</span></h2>
+  <p class="lede small reveal">From the agenda and guest list alone, AI plays the meeting forward: who will dominate, which item runs over, and whether the decision survives the decider's hard stop. Then it <b>fixes the agenda</b> and plays it again.</p>
+</section>
+
+<section id="demo-sim" class="stop demo-stage">
+  <div class="gw-window" id="sim-window">
+    <div class="gw-top">
+      <span class="meet-logo" aria-hidden="true"><i></i></span>
+      <div class="gw-title"><b id="m-title">Q4 Roadmap Review</b><small id="m-when"></small></div>
+      <div class="seg" role="group" aria-label="Meeting source">
+        <button class="on" data-src="sample">Sample meeting</button>
+        <button data-src="paste">Paste your agenda</button>
+      </div>
+      <span class="src-badge" id="sim-src"></span>
+    </div>
+
+    <div class="paste-panel" id="paste-panel" hidden>
+      <textarea id="paste-text" rows="9" spellcheck="false"></textarea>
+      <div class="paste-row">
+        <span class="muted-s">Gemini turns free text into guests, agenda items, and hard stops.</span>
+        <button class="gw-btn primary" id="parse-btn">Parse agenda</button>
+      </div>
+    </div>
+
+    <div class="sim-body">
+      <aside class="sim-side">
+        <h4>Goal</h4>
+        <p class="goal" id="m-goal"></p>
+        <h4>Guests</h4>
+        <ul class="guests" id="guests"></ul>
+        <h4>Agenda</h4>
+        <ol class="agenda" id="agenda"></ol>
+      </aside>
+      <div class="sim-stage">
+        <div class="stage-head">
+          <div class="clock"><span id="clock">0:00</span><small>predicted minute</small></div>
+          <div class="risk-pill" id="risk-pill"><small>Meeting risk</small><b id="risk-score">—</b></div>
+          <div class="stage-actions">
+            <button class="gw-btn primary" id="run-btn">Run simulation</button>
+            <button class="gw-btn" id="fix-btn" disabled>Apply fixes &amp; re-run</button>
+          </div>
+        </div>
+        <div class="timeline" id="timeline"></div>
+        <div class="stage-low">
+          <div class="radar-box"><svg id="radar" viewBox="-50 0 420 300" role="img" aria-label="Meeting risk radar"></svg></div>
+          <div class="feed" id="feed"><p class="feed-empty">Press <b>Run simulation</b> to play this meeting forward.</p></div>
+        </div>
+        <div class="fixes" id="fixes" hidden></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 02 REHEARSE -->
+<section id="ch-rehearse" class="stop chapter chapter-intro">
+  <span class="ch-no">02</span>
+  <h2 class="ch-title reveal">Hear the hard questions <span class="calm">before the room asks them.</span></h2>
+  <p class="lede small reveal">AI reads the agenda and the guest list, then plays the toughest person in the room. Answer out loud. Get coached in seconds.</p>
+</section>
+
+<section id="demo-rehearse" class="stop demo-stage">
+  <div class="gw-window">
+    <div class="gw-top">
+      <span class="meet-logo" aria-hidden="true"><i></i></span>
+      <div class="gw-title"><b>Rehearsal room</b><small id="r-meeting">Q4 Roadmap Review</small></div>
+      <span class="src-badge" id="q-src"></span>
+    </div>
+    <div class="rehearse-body">
+      <div class="q-list" id="q-list"><p class="feed-empty">Generating questions…</p></div>
+      <div class="answer-pane" id="answer-pane">
+        <div class="asker" id="asker"></div>
+        <div class="answer-box">
+          <textarea id="answer" rows="5" placeholder="Type your answer, or press the mic and say it out loud"></textarea>
+          <div class="answer-row">
+            <button class="mic" id="mic" aria-label="Answer out loud"><span></span></button>
+            <span class="muted-s" id="mic-hint">Speak your answer — it's transcribed in your browser</span>
+            <button class="gw-btn primary" id="coach-btn">Coach me</button>
+          </div>
+        </div>
+        <div class="coach" id="coach" hidden></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 03 MIRROR -->
+<section id="ch-mirror" class="stop chapter chapter-intro">
+  <span class="ch-no">03</span>
+  <h2 class="ch-title reveal">After the meeting: <span class="calm">a mirror, not minutes.</span></h2>
+  <p class="lede small reveal">A private review of how <b>you</b> showed up — like a coach walking you through game film. Only you see it. It ends with exactly one thing to try next time.</p>
+</section>
+
+<section id="demo-mirror" class="stop demo-stage">
+  <div class="meet-window">
+    <div class="meet-top">
+      <span class="meet-logo" aria-hidden="true"><i></i></span>
+      <div class="gw-title"><b>You left the meeting</b><small>Q4 Roadmap Review · what actually happened</small></div>
+      <div class="seg dark" role="group" aria-label="Transcript source">
+        <button class="on" data-tsrc="sample">Sample transcript</button>
+        <button data-tsrc="paste">Paste a transcript</button>
+      </div>
+      <span class="src-badge" id="mirror-src"></span>
+    </div>
+    <div class="tpaste" id="tpaste" hidden>
+      <textarea id="tpaste-text" rows="8" spellcheck="false" placeholder="[00:00] You: …&#10;[00:01] Alex: …"></textarea>
+    </div>
+    <div class="mirror-cta"><button class="meet-btn" id="mirror-btn">Show me my mirror</button></div>
+    <div class="mirror" id="mirror" hidden></div>
+  </div>
+</section>
+
+<!-- THE LOOP -->
+<section id="loop" class="stop chapter loop-stage">
+  <p class="kicker reveal">The loop</p>
+  <div class="loop reveal">
+    <div class="loop-node"><small>Before</small><b>Simulate</b></div><i>→</i>
+    <div class="loop-node"><small>During</small><b>Meet</b></div><i>→</i>
+    <div class="loop-node"><small>After</small><b>Mirror</b></div><i>→</i>
+    <div class="loop-node goal-node"><small>Next meeting's goal</small><b id="loop-goal">Put the decision in the first third of the meeting.</b></div>
+  </div>
+  <p class="lede small reveal">Every mirror ends with one goal. The next rehearsal checks for it. <b>Meetings stop being something that happens to you.</b></p>
+</section>
+
+<!-- 04 NEW METRIC -->
+<section id="ch-metric" class="stop chapter">
+  <span class="ch-no">04</span>
+  <h2 class="ch-title reveal">A new north star</h2>
+  <div class="metric-swap reveal">
+    <div class="m old"><small>Today</small><b>Minutes in meetings</b><span>Usage, engagement, call length</span></div>
+    <div class="arrow">→</div>
+    <div class="m new"><small>Rehearsed</small><b>Decision rate</b><span>Meetings that end with a recorded decision / all meetings</span></div>
+  </div>
+  <div class="why-grid reveal">
+    <div><h4>“Isn't this just more prep work?”</h4><p>Rehearsal takes ninety seconds and runs off the invite you already wrote. One avoided follow-up meeting pays for a month of it.</p></div>
+    <div><h4>The business case</h4><p>Zoom and Teams are racing to the best recap. Meet can own the moment before the call — a Gemini for Workspace feature that admins can measure in hours saved.</p></div>
+    <div><h4>Privacy by design</h4><p>Risks describe the agenda, not people. Only the organizer sees the simulation. Only you see your mirror. Nobody gets a score they didn't ask for.</p></div>
+    <div><h4>How we'd prove it</h4><p>A/B test with organizers: decision rate, meetings ending on time, and follow-up meetings per decision — not just time spent in Meet.</p></div>
+  </div>
+</section>
+
+<section id="end" class="stop chapter end">
+  <h2 class="end-title reveal">The best recap<br/>is the one you<br/>never need.</h2>
+  <p class="credits reveal">Built with Gemini API · Web Speech API · a deterministic meeting simulator</p>
+</section>
+</main>
+
+<!-- SETTINGS -->
+<dialog id="settings" class="settings">
+  <form method="dialog">
+    <h3>Data sources</h3>
+    <p class="muted">Keys are stored only in this browser (localStorage) and shared with the other demos on this address. Every live response is cached, so if the network drops the demo falls back to the cache, then to sample data.</p>
+    <label>Gemini API key<input id="k-gm" autocomplete="off" placeholder="AIza…" /></label>
+    <label>Gemini model<input id="k-model" autocomplete="off" placeholder="gemini-3.5-flash-lite (default)" /></label>
+    <label class="check"><input type="checkbox" id="k-offline" /> Safe demo mode: use cache and sample data only, no live requests</label>
+    <ul class="src-list" id="src-list"></ul>
+    <div class="row">
+      <button value="cancel" class="ghost-btn">Close</button>
+      <button id="clear-cache" type="button" class="ghost-btn">Clear cache</button>
+      <button id="save-keys" value="default" class="pill-btn">Save</button>
+    </div>
+  </form>
+</dialog>
+
+<div class="toast" id="toast"></div>
+
+<script type="module" src="js/main.js"></script>
+</body>
+</html>

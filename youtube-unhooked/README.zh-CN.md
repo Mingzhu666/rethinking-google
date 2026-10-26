@@ -14,13 +14,13 @@
 
 ## 运行
 
-在项目上一级目录执行：
+在仓库根目录执行：
 
 ```bash
-npx -y http-server youtube-unhooked -p 5173 -c-1
+npx -y http-server . -p 5173 -c-1
 ```
 
-打开 http://localhost:5173 。演示时用 `→` / 空格翻到下一屏，`←` 返回。
+打开 http://localhost:5173/youtube-unhooked/ 。演示时用 `→` / 空格翻到下一屏，`←` 返回。
 
 ## API key（可选）
 

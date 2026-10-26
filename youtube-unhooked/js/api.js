@@ -98,27 +98,31 @@ export async function gemini(name, prompt, mockFn) {
     const { gm, model } = getKeys();
     if (!gm) throw new Error('no gemini key');
     const chain = [...new Set([model, ...GEMINI_MODELS].filter(Boolean))];
-    let lastErr;
-    for (const m of chain) {
-      try {
-        const res = await getJSON(`https://generativelanguage.googleapis.com/v1beta/models/${m}:generateContent?key=${gm}`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          signal: AbortSignal.timeout(20000),
-          body: JSON.stringify({
-            contents: [{ parts: [{ text: prompt }] }],
-            generationConfig: { responseMimeType: 'application/json', temperature: 0.7 },
-          }),
-        });
-        const text = res.candidates?.[0]?.content?.parts?.map(p => p.text).join('') || '';
-        return JSON.parse(text);
-      } catch (e) {
-        lastErr = e;
-        console.warn(`[gemini] ${m} failed:`, e.message);
-      }
+    const call = async m => {
+      const res = await getJSON(`https://generativelanguage.googleapis.com/v1beta/models/${m}:generateContent?key=${gm}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        signal: AbortSignal.timeout(35000),
+        body: JSON.stringify({
+          contents: [{ parts: [{ text: prompt }] }],
+          generationConfig: { responseMimeType: 'application/json', temperature: 0.7 },
+        }),
+      });
+      const text = res.candidates?.[0]?.content?.parts?.map(p => p.text).join('') || '';
+      return JSON.parse(text);
+    };
+    // Race the first two models (whichever answers first wins), then fall back to the rest in order
+    try {
+      return await Promise.any(chain.slice(0, 2).map(call));
+    } catch (e) {
+      console.warn('[gemini] first models failed:', e.errors?.map(x => x.message).join(' / ') || e.message);
     }
-    throw lastErr;
-  }, mockFn, 45000);
+    let lastErr;
+    for (const m of chain.slice(2)) {
+      try { return await call(m); } catch (e) { lastErr = e; console.warn(`[gemini] ${m} failed:`, e.message); }
+    }
+    throw lastErr || new Error('all gemini models failed');
+  }, mockFn, 70000);
 }
 
 // ---------- Free public APIs (no key needed) ----------

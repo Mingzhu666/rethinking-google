@@ -12,13 +12,13 @@ An interactive product proposal built for live demos: change YouTube's recommend
 
 ## Run
 
-From the parent directory:
+From the repository root:
 
 ```bash
-npx -y http-server youtube-unhooked -p 5173 -c-1
+npx -y http-server . -p 5173 -c-1
 ```
 
-Open http://localhost:5173. While presenting, press `→` / space to advance one screen and `←` to go back.
+Open http://localhost:5173/youtube-unhooked/. While presenting, press `→` / space to advance one screen and `←` to go back.
 
 ## API keys (optional)
 

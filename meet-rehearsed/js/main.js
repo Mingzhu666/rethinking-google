@@ -1,0 +1,92 @@
+import { SAMPLE_MEETING } from './data.js';
+import { simulate } from './sim.js';
+import { getKeys, setKeys, clearCache, sourceLog } from './api.js';
+import { $, $$, countUp, toast } from './ui.js';
+import { initSimulator } from './simulator.js';
+import { initRehearse } from './rehearse.js';
+import { initMirror } from './mirror.js';
+
+// ---------- Hero: the sample meeting playing behind the headline ----------
+function heroLanes() {
+  const sim = simulate(SAMPLE_MEETING);
+  const span = sim.total + 2;
+  const pct = t => `${(t / span) * 100}%`;
+  $('#hero-lanes').innerHTML = SAMPLE_MEETING.people.map(p => `<div class="hl">${
+    sim.segments.filter(s => s.who === p.id).map(s => `<span style="left:${pct(s.s)};width:${pct(s.e - s.s)};background:${p.color}"></span>`).join('')}</div>`).join('') +
+    `<div class="redzone" style="left:${pct(sim.failAt)};right:0"></div><div class="playhead"></div>`;
+  $('#hero-fail').dataset.count = sim.failAt;
+  return sim.failAt;
+}
+
+// ---------- Scroll reveals ----------
+function reveals(failAt) {
+  const io = new IntersectionObserver(entries => entries.forEach(e => {
+    if (!e.isIntersecting) return;
+    e.target.classList.add('in');
+    io.unobserve(e.target);
+  }), { threshold: 0.2 });
+  $$('.reveal, .objective, .gw-window, .meet-window').forEach(el => io.observe(el));
+  setTimeout(() => countUp($('#hero-fail'), failAt, { dur: 2200 }), 600);
+
+  const nav = new IntersectionObserver(entries => entries.forEach(e => {
+    if (!e.isIntersecting) return;
+    $$('.chapters a').forEach(a => a.classList.toggle('active', a.getAttribute('href') === '#' + e.target.id));
+  }), { threshold: 0.4 });
+  ['problem', 'ch-sim', 'ch-rehearse', 'ch-mirror', 'ch-metric'].forEach(id => nav.observe($('#' + id)));
+}
+
+// ---------- Presenter mode: arrow keys / space jump between screens ----------
+function presenter() {
+  const stops = $$('.stop');
+  const current = () => {
+    const y = window.scrollY + window.innerHeight * 0.35;
+    let idx = 0;
+    stops.forEach((s, i) => { if (s.offsetTop <= y) idx = i; });
+    return idx;
+  };
+  document.addEventListener('keydown', e => {
+    if (e.target.closest('input, textarea, dialog')) return;
+    const fwd = ['ArrowRight', 'ArrowDown', 'PageDown', ' '].includes(e.key);
+    const back = ['ArrowLeft', 'ArrowUp', 'PageUp'].includes(e.key);
+    if (!fwd && !back) return;
+    e.preventDefault();
+    const i = Math.max(0, Math.min(stops.length - 1, current() + (fwd ? 1 : -1)));
+    stops[i].scrollIntoView({ behavior: 'smooth' });
+  });
+}
+
+// ---------- Data source settings ----------
+function settings() {
+  const dlg = $('#settings');
+  const fill = () => {
+    const k = getKeys();
+    $('#k-gm').value = k.gm || ''; $('#k-model').value = k.model || ''; $('#k-offline').checked = !!k.offline;
+    const names = ['Gemini pre-meeting messages', 'Gemini agenda parser', 'Gemini question predictor', 'Gemini answer coach', 'Gemini meeting mirror'];
+    const txt = { live: '● live', cache: '● cached', mock: '○ sample' };
+    $('#src-list').innerHTML = names.map(n => `<li><span>${n}</span><span>${txt[sourceLog[n]] || '— not called yet'}</span></li>`).join('');
+  };
+  $('#open-settings').addEventListener('click', () => { fill(); dlg.showModal(); });
+  $('#save-keys').addEventListener('click', () => {
+    setKeys({ ...getKeys(), gm: $('#k-gm').value.trim(), model: $('#k-model').value.trim(), offline: $('#k-offline').checked });
+    refreshStatus();
+    toast('Saved. Reload the page to apply to every module.');
+  });
+  $('#clear-cache').addEventListener('click', () => { clearCache(); toast('Cache cleared'); });
+  document.addEventListener('uh:source', refreshStatus);
+  refreshStatus();
+}
+function refreshStatus() {
+  const k = getKeys();
+  const dot = $('#global-status'), text = $('#global-status-text');
+  if (k.offline) { dot.className = 'status-dot'; text.textContent = 'Safe demo mode'; return; }
+  dot.className = 'status-dot ' + (k.gm ? 'live' : '');
+  text.textContent = k.gm ? 'Live data' : 'Sample data · add key';
+}
+
+const failAt = heroLanes();
+reveals(failAt);
+presenter();
+settings();
+initSimulator();
+initRehearse();
+initMirror();
