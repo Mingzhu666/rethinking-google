@@ -133,7 +133,7 @@ section.chapter { min-height: 100vh; padding: 18vh 10vw 12vh; position: relative
 .wrap-card small { font-size: 15px; font-weight: 500; }
 .wrap-card > b { font-family: var(--latin); font-weight: 400; font-size: clamp(64px, 7vw, 110px); line-height: .9; }
 .wrap-card > b i { font-family: var(--serif); font-style: normal; font-size: .3em; margin-left: 6px; }
-.wrap-card span { font-size: 14px; }
+.wrap-card > span { font-size: 14px; }
 .w1 { background: var(--calm); }
 .w2 { background: #f6d24a; }
 .w3 { background: var(--trap); color: var(--bone); }

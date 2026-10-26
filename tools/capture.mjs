@@ -1,7 +1,7 @@
 // Capture 4:3 cover screenshots for the projects page.
 // Usage: serve the repo root on :5173, then `node tools/capture.mjs [projectId ...]` (no ids = all).
 // Each shot opens a demo with an empty localStorage (sample data), optionally clicks through to a
-// key moment, and clips a 4:3 frame starting at the top of `selector`.
+// key moment, and saves the 1440×1080 (4:3) viewport scrolled to the top of `selector`.
 import puppeteer from 'puppeteer-core';
 import { mkdir } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
@@ -22,6 +22,22 @@ const SHOTS = {
         await page.evaluate(() => { document.querySelector('[data-k="binge"]').click(); document.querySelector('[data-k="drama"]').click(); });
       },
     },
+    {
+      file: 'trap-map.jpg', url: 'youtube-unhooked/', selector: '#demo-takeout .yt-window', offset: -20, wait: 1500,
+      prepare: async page => { await page.evaluate(() => document.querySelector('#use-persona').click()); await sleep(4500); },
+    },
+    {
+      file: 'report.jpg', url: 'youtube-unhooked/', selector: '#report', offset: 40, wait: 2500,
+      prepare: async page => { await page.evaluate(() => document.querySelector('#use-persona').click()); await sleep(4500); },
+    },
+    {
+      file: 'blind-box.jpg', url: 'youtube-unhooked/', selector: '#demo-box .yt-window', offset: -20, wait: 1500,
+      prepare: async page => { await page.evaluate(() => document.querySelector('#open-box').click()); await sleep(11000); },
+    },
+    {
+      file: 'time-capsule.jpg', url: 'youtube-unhooked/', selector: '#capsule-dial', offset: -20, wait: 2500,
+      prepare: async page => { await page.evaluate(() => document.querySelector('#capsule-dial [data-y="10"]').click()); },
+    },
   ],
   'meet-rehearsed': [
     { file: 'cover-1.jpg', url: 'meet-rehearsed/', selector: 'body', wait: 3500 },
@@ -31,6 +47,30 @@ const SHOTS = {
         await page.evaluate(() => document.querySelector('#run-btn').click());
         await sleep(7000);
       },
+    },
+    {
+      file: 'simulator-fixed.jpg', url: 'meet-rehearsed/', selector: '#sim-window', offset: -20, wait: 1500,
+      prepare: async page => {
+        await page.evaluate(() => document.querySelector('#run-btn').click());
+        await sleep(7000);
+        await page.evaluate(() => document.querySelector('#fix-btn').click());
+        await sleep(9000);
+      },
+    },
+    {
+      file: 'rehearsal.jpg', url: 'meet-rehearsed/', selector: '#demo-rehearse .gw-window', offset: -20, wait: 1500,
+      prepare: async page => {
+        await page.waitForSelector('.q');
+        await page.evaluate(() => {
+          document.querySelector('#answer').value = 'We buy the index but own ranking. On-call stays with search infra, and I think we can maybe have the RACI done by Thursday.';
+          document.querySelector('#coach-btn').click();
+        });
+        await sleep(1500);
+      },
+    },
+    {
+      file: 'mirror.jpg', url: 'meet-rehearsed/', selector: '#demo-mirror .meet-window', offset: -20, wait: 2500,
+      prepare: async page => { await page.evaluate(() => document.querySelector('#mirror-btn').click()); await sleep(2000); },
     },
   ],
 };
@@ -53,6 +93,12 @@ try {
           window.scrollTo(0, el.getBoundingClientRect().top + window.scrollY + (off || 0) - 64);
         }, shot.selector, shot.offset);
         await sleep(1500); // let scroll reveals finish
+        // Windows slide in with a transform, so measure again once they've settled
+        await page.evaluate((sel, off) => {
+          const el = document.querySelector(sel);
+          window.scrollTo(0, el.getBoundingClientRect().top + window.scrollY + (off || 0) - 64);
+        }, shot.selector, shot.offset);
+        await sleep(300);
       }
       if (shot.prepare) await shot.prepare(page);
       await sleep(shot.wait || 1000);

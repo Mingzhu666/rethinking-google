@@ -41,14 +41,17 @@ export const PROJECTS = [
       {
         name: 'Anti-interest profile',
         text: 'Name the person you don\'t want to become ("someone led around by outrage"). Gemini blocks matching videos in the feed, explains why, and offers a better alternative. Import Google Takeout to see your own trap map and late-night spirals.',
+        shots: ['assets/youtube-unhooked/trap-map.jpg', 'assets/youtube-unhooked/report.jpg'],
       },
       {
         name: 'Blind box channel',
         text: 'Once a day, the outside world programs your feed: today\'s date, the weather where you are, a stranger\'s birthday, a random Wikipedia article. Every video says why you are seeing it today.',
+        shots: ['assets/youtube-unhooked/blind-box.jpg'],
       },
       {
         name: 'Time capsule',
         text: 'A separate entrance that only shows videos uploaded on this date one, three, five, or ten years ago. The interface ages with the era.',
+        shots: ['assets/youtube-unhooked/time-capsule.jpg'],
       },
     ],
     metric: { from: 'Watch time', to: 'Worth-it rate', note: 'Sessions rated "worth it" / all sessions' },
@@ -87,14 +90,17 @@ export const PROJECTS = [
       {
         name: 'Meeting flight simulator',
         text: 'From the agenda and guest list alone, a simulator plays the meeting forward: who dominates, which item overruns, whether the decision survives the decider\'s hard stop. One click applies fixes, drafts pre-meeting messages with Gemini, and replays it — risk drops from 76 to 10.',
+        shots: ['assets/meet-rehearsed/simulator-fixed.jpg'],
       },
       {
         name: 'Rehearsal room',
         text: 'Gemini plays the toughest people in the room and asks the questions you are dreading. Answer out loud; get a score, the one fix that matters, and a stronger version of your answer.',
+        shots: ['assets/meet-rehearsed/rehearsal.jpg'],
       },
       {
         name: 'Meeting mirror',
         text: 'A private game-film review of how you showed up: talk share, interruptions, filler words, key moments on a timeline, and exactly one thing to try next time — which feeds the next rehearsal.',
+        shots: ['assets/meet-rehearsed/mirror.jpg'],
       },
     ],
     metric: {

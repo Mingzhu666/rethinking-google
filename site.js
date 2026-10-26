@@ -96,7 +96,8 @@ function renderDetail(id) {
       <div class="gallery">${p.shots.map(s => `<img src="${s}" alt="" />`).join('')}</div>
       <section class="sec"><small>${UI.problem}</small><p>${esc(p.problem)}</p></section>
       <section class="sec"><small>${UI.insight}</small><div><p style="margin-bottom:14px">${esc(p.idea)}</p><div class="shift"><div class="from">${esc(p.shift.from)}</div><div class="to">${esc(p.shift.to)}</div></div></div></section>
-      <section class="sec"><small>${UI.built}</small><div class="features">${p.features.map((f, i) => `<div class="feature"><h4><span>0${i + 1}</span>${esc(f.name)}</h4><p>${esc(f.text)}</p></div>`).join('')}</div></section>
+      <section class="sec"><small>${UI.built}</small><div class="features">${p.features.map((f, i) => `<div class="feature"><h4><span>0${i + 1}</span>${esc(f.name)}</h4><p>${esc(f.text)}</p>${
+        f.shots?.length ? `<div class="feature-shots n${f.shots.length}">${f.shots.map(s => `<img src="${s}" alt="${esc(f.name)}" loading="lazy" />`).join('')}</div>` : ''}</div>`).join('')}</div></section>
       <section class="sec"><small>${UI.metric}</small><div><div class="metric"><span class="m from">${esc(p.metric.from)}</span><em>→</em><span class="m to">${esc(p.metric.to)}</span></div><p class="metric-note">${esc(p.metric.note)}</p></div></section>
       <section class="sec"><small>${UI.business}</small>${list(p.business)}</section>
       <section class="sec"><small>${UI.tech}</small>${list(p.tech)}</section>
