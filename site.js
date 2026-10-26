@@ -26,7 +26,8 @@ const UI = {
 };
 const API_TAGS = /API|Open-Meteo|Wikimedia|Gemini/;
 
-let lang = localStorage.getItem('site:lang') || (navigator.language?.startsWith('zh') ? 'zh' : 'en');
+// English by default for everyone; 中文 only when the visitor switches to it
+let lang = localStorage.getItem('site:lang') === 'zh' ? 'zh' : 'en';
 const t = v => (v && typeof v === 'object' && !Array.isArray(v) ? (v[lang] ?? v.en) : v);
 const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 const fmtDate = ym => {
