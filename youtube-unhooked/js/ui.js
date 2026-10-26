@@ -1,4 +1,4 @@
-// 通用 UI：视频卡片、缩略图、数字滚动、提示、来源徽章。
+// Shared UI: video cards, thumbnails, count-up numbers, toasts, source badges.
 
 export const $ = (s, el = document) => el.querySelector(s);
 export const $$ = (s, el = document) => [...el.querySelectorAll(s)];
@@ -15,15 +15,16 @@ export function thumbHTML(v) {
 
 export function fmtViews(n) {
   if (typeof n === 'string') return n;
-  if (n >= 1e8) return (n / 1e8).toFixed(1) + '亿';
-  if (n >= 1e4) return Math.round(n / 1e4) + '万';
+  if (n >= 1e9) return (n / 1e9).toFixed(1).replace(/\.0$/, '') + 'B';
+  if (n >= 1e6) return (n / 1e6).toFixed(1).replace(/\.0$/, '') + 'M';
+  if (n >= 1e3) return Math.round(n / 1e3) + 'K';
   return String(n);
 }
 
 export function cardHTML(v, extra = '') {
   const initial = esc((v.channel || '?').trim()[0]);
   const h = v.hue ?? (v.channel || '').length * 37;
-  const meta = [v.channel, v.views != null ? fmtViews(v.views) + '次观看' : null, v.when].filter(Boolean).map(esc).join(' · ');
+  const meta = [v.channel, v.views != null ? fmtViews(v.views) + ' views' : null, v.when].filter(Boolean).map(esc).join(' · ');
   const link = v.url ? `href="${esc(v.url)}" target="_blank" rel="noopener"` : '';
   return `
     <div class="thumb-wrap">${thumbHTML(v)}<span class="dur">${esc(v.duration || '')}</span>${extra}</div>
@@ -45,7 +46,7 @@ export function countUp(el, to, { dur = 1400, dec = 0 } = {}) {
     if (p < 1) requestAnimationFrame(step);
   };
   requestAnimationFrame(step);
-  // 后台标签页里 rAF 会暂停，保证最终值一定落地
+  // rAF pauses in background tabs; make sure the final value always lands
   setTimeout(() => { if (el._countToken === token) el.textContent = Number(to).toFixed(dec); }, dur + 60);
 }
 
@@ -58,13 +59,13 @@ export function toast(msg) {
   toastTimer = setTimeout(() => t.classList.remove('show'), 2600);
 }
 
-const SRC_TEXT = { live: 'LIVE 实时', cache: 'CACHED 缓存', mock: 'SAMPLE 示例', mixed: 'MIXED 部分实时' };
+const SRC_TEXT = { live: 'Live', cache: 'Cached', mock: 'Sample', mixed: 'Partly live' };
 export function setBadge(el, source) {
   if (!el) return;
   el.className = 'src-badge ' + source;
   el.textContent = SRC_TEXT[source] || '';
 }
-// 多个来源合成一个徽章：全部一致就用那个，否则标为混合
+// Merge several sources into one badge: use it if they all agree, otherwise mixed
 export function mergeSources(list) {
   return list.every(s => s === list[0]) ? list[0] : 'mixed';
 }

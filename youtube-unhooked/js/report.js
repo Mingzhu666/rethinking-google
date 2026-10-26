@@ -1,8 +1,8 @@
-// 每周报告：Wrapped 风格。数字来自陷阱地图的分析；没分析时用默认示例值。
+// Weekly report, Wrapped-style. Numbers come from the trap map analysis; defaults are shown until then.
 import { $, countUp, toast } from './ui.js';
 
-const DAYS = ['周日', '周一', '周二', '周三', '周四', '周五', '周六'];
-const BLOCK_RATE = 0.7; // 假设 Unhooked 能拦下七成陷阱推荐
+const DAYS = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+const BLOCK_RATE = 0.7; // assume Unhooked blocks 70% of trap recommendations
 
 export function updateReport(a) {
   const resist = Math.max(1, Math.round(a.lastWeekTraps * BLOCK_RATE));
@@ -11,8 +11,8 @@ export function updateReport(a) {
   $('#w-hours').dataset.count = hours.toFixed(1);
   const s = a.recentSpiral;
   if (s) {
-    $('#w-danger').textContent = `${DAYS[s.start.getDay()]} ${s.start.toTimeString().slice(0, 5)}`;
-    $('#w-danger-sub').textContent = `那晚你连续看了 ${s.n} 个视频。下一次，我们会在第 3 个时提醒你`;
+    $('#w-danger').textContent = `${DAYS[s.start.getDay()]} ${s.start.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' })}`;
+    $('#w-danger-sub').textContent = `${s.n} videos in a row that night. Next time, we'll check in at video three.`;
   }
   const oldPct = Math.round(a.ratio * 100);
   $('#w-regret-old').textContent = oldPct + '%';
@@ -37,9 +37,9 @@ export function initReport() {
       a.download = 'unhooked-weekly.png';
       a.href = canvas.toDataURL('image/png');
       a.click();
-      toast('分享卡片已保存');
+      toast('Share card saved');
     } catch {
-      toast('离线状态下无法生成图片，可以直接截图');
+      toast('Can\'t render the image offline — take a screenshot instead');
     }
   });
 }

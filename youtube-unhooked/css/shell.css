@@ -7,9 +7,9 @@
   --line: rgba(239, 232, 218, 0.12);
   --trap: #ff2d3d;
   --calm: #9dffcf;
-  --serif: "Noto Serif SC", "Songti SC", serif;
-  --latin: "Instrument Serif", "Noto Serif SC", serif;
-  --sans: "Noto Sans SC", "PingFang SC", sans-serif;
+  --serif: "Fraunces", Georgia, serif;
+  --latin: "Instrument Serif", Georgia, serif;
+  --sans: "Geist", "Helvetica Neue", sans-serif;
   --mono: "IBM Plex Mono", ui-monospace, monospace;
 }
 
@@ -30,7 +30,7 @@ b { font-weight: 700; }
 .muted { color: var(--bone-dim); }
 kbd { font-family: var(--mono); border: 1px solid var(--line); border-radius: 4px; padding: 1px 6px; font-size: 0.85em; }
 
-/* 胶片颗粒 */
+/* Film grain */
 .grain {
   position: fixed; inset: -50%; z-index: 100; pointer-events: none; opacity: 0.07;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
@@ -38,7 +38,7 @@ kbd { font-family: var(--mono); border: 1px solid var(--line); border-radius: 4p
 }
 @keyframes grain { 0%{transform:translate(0,0)} 33%{transform:translate(-3%,2%)} 66%{transform:translate(2%,-3%)} 100%{transform:translate(0,0)} }
 
-/* 顶栏 */
+/* Top bar */
 .topbar {
   position: fixed; top: 0; left: 0; right: 0; z-index: 50;
   display: flex; align-items: center; gap: 24px; padding: 14px 28px;
@@ -64,17 +64,17 @@ kbd { font-family: var(--mono); border: 1px solid var(--line); border-radius: 4p
 .status-dot.live { background: #1fbf6a; box-shadow: 0 0 8px #1fbf6a; }
 .status-dot.partial { background: #f0a020; }
 
-/* 通用章节 */
+/* Chapters */
 section.chapter { min-height: 100vh; padding: 18vh 10vw 12vh; position: relative; }
 .kicker { font-family: var(--mono); font-size: 13px; color: var(--bone-dim); letter-spacing: .06em; margin: 0 0 28px; }
-.lede { font-family: var(--serif); font-weight: 500; font-size: clamp(24px, 3.2vw, 44px); line-height: 1.5; max-width: 22em; margin: 0; }
+.lede { font-family: var(--serif); font-weight: 500; font-size: clamp(24px, 3.2vw, 44px); line-height: 1.35; max-width: 24em; margin: 0; }
 .lede.small { font-size: clamp(18px, 1.8vw, 24px); line-height: 1.8; color: var(--bone-dim); max-width: 32em; margin-top: 36px; }
 .lede.small b { color: var(--bone); font-weight: 500; }
 .ch-no { font-family: var(--latin); font-style: italic; font-size: clamp(120px, 18vw, 260px); line-height: .8; color: transparent; -webkit-text-stroke: 1px var(--line); position: absolute; right: 6vw; top: 12vh; pointer-events: none; }
-.ch-title { font-family: var(--serif); font-weight: 900; font-size: clamp(34px, 5vw, 76px); line-height: 1.25; margin: 0; max-width: 20em; letter-spacing: -.01em; }
+.ch-title { text-wrap: balance; font-family: var(--serif); font-weight: 900; font-size: clamp(34px, 5vw, 76px); line-height: 1.25; margin: 0; max-width: 18em; letter-spacing: -.02em; line-height: 1.12; }
 .chapter-intro { display: flex; flex-direction: column; justify-content: center; }
 
-/* 入场动画 */
+/* Reveal on scroll */
 .reveal { opacity: 0; transform: translateY(28px); transition: opacity 1s cubic-bezier(.2,.7,.2,1), transform 1s cubic-bezier(.2,.7,.2,1); transition-delay: var(--d, 0s); }
 .reveal.in { opacity: 1; transform: none; }
 
@@ -89,22 +89,22 @@ section.chapter { min-height: 100vh; padding: 18vh 10vw 12vh; position: relative
 .rain-col .mini p { margin: 6px 2px 0; font-size: 12px; color: var(--bone-dim); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .hero::after { content: ""; position: absolute; inset: 0; background: radial-gradient(ellipse 60% 55% at 50% 50%, rgba(11,10,9,.94) 30%, rgba(11,10,9,.55) 70%, rgba(11,10,9,.9)); pointer-events: none; }
 .hero-inner { position: relative; z-index: 2; text-align: center; padding: 0 6vw; }
-.hero-title { font-family: var(--serif); font-weight: 900; font-size: clamp(40px, 7vw, 112px); margin: 0; line-height: 1.15; letter-spacing: -.02em; }
-.hero-title .num { font-family: var(--latin); font-weight: 400; font-style: italic; font-size: 1.25em; display: inline-block; min-width: 1.3em; }
+.hero-title { text-wrap: balance; font-family: var(--serif); font-weight: 900; font-size: clamp(40px, 6.4vw, 104px); margin: 0; line-height: 1.05; letter-spacing: -.03em; }
+.hero-title .num { font-family: var(--latin); font-weight: 400; font-style: italic; font-size: 1.25em; display: inline-block; min-width: 1.05em; text-align: center; letter-spacing: 0; }
 .hero-sub { font-family: var(--serif); font-weight: 500; font-size: clamp(22px, 3vw, 42px); color: var(--bone-dim); margin: 24px 0 0; }
 .hero .kicker { --d: .1s; }
 .hero-title.reveal { --d: .4s; }
 .scroll-cue { position: absolute; bottom: 32px; left: 0; right: 0; text-align: center; z-index: 2; font-family: var(--mono); font-size: 12px; color: var(--muted); animation: bob 2.4s ease-in-out infinite; }
 @keyframes bob { 50% { transform: translateY(6px); } }
 
-/* 问题 */
+/* Problem */
 .big-stat { display: flex; align-items: flex-end; gap: 32px; flex-wrap: wrap; margin-bottom: 10vh; }
 .stat-num { font-family: var(--latin); font-size: clamp(160px, 26vw, 380px); line-height: .78; color: var(--trap); letter-spacing: -.04em; }
 .stat-num small { font-size: .35em; }
 .big-stat p { font-family: var(--serif); font-size: clamp(20px, 2.2vw, 30px); max-width: 12em; margin: 0 0 1em; line-height: 1.5; }
 .big-stat cite { display: block; font-family: var(--mono); font-style: normal; font-size: 12px; color: var(--muted); margin-top: 12px; }
 
-/* 目标函数 */
+/* Objective function */
 .objective { font-family: var(--mono); font-size: clamp(18px, 2.6vw, 38px); display: grid; gap: 18px; }
 .obj-line { position: relative; width: fit-content; padding: 4px 8px; }
 .obj-line .kw { color: var(--bone-dim); margin-right: .6em; }
@@ -120,11 +120,11 @@ section.chapter { min-height: 100vh; padding: 18vh 10vw 12vh; position: relative
 .trio-card h3 { font-family: var(--serif); font-size: 24px; margin: 14px 0 8px; }
 .trio-card p { margin: 0; color: var(--bone-dim); }
 
-/* 演示舞台 */
+/* Demo stage */
 .demo-stage { min-height: 100vh; padding: 12vh 4vw 8vh; display: flex; flex-direction: column; align-items: center; justify-content: center; position: relative; }
 .demo-stage::before { content: ""; position: absolute; inset: 8vh 2vw; border-radius: 40px; background: radial-gradient(ellipse at 50% 0%, rgba(239,232,218,.08), transparent 70%); pointer-events: none; }
 
-/* 每周报告（Wrapped） */
+/* Weekly report (Wrapped) */
 .report-stage { text-align: center; display: flex; flex-direction: column; align-items: center; justify-content: center; }
 .wrapped { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 18px; width: 100%; max-width: 1200px; }
 .wrap-card { border-radius: 24px; padding: 28px 22px; min-height: 340px; display: flex; flex-direction: column; justify-content: space-between; text-align: left; color: var(--ink); position: relative; overflow: hidden; opacity: 0; transform: translateY(40px) rotate(-2deg); transition: all .9s cubic-bezier(.2,.8,.2,1); }
@@ -143,7 +143,7 @@ section.chapter { min-height: 100vh; padding: 18vh 10vw 12vh; position: relative
 .w4 .calm { color: #0a8f55; }
 .wrap-card::after { content: ""; position: absolute; width: 220px; height: 220px; border-radius: 50%; right: -70px; bottom: -70px; border: 34px solid rgba(0,0,0,.08); }
 
-/* 新指标 */
+/* New metric */
 .metric-swap { display: flex; align-items: center; gap: 4vw; margin: 8vh 0; flex-wrap: wrap; }
 .metric-swap .m { border: 1px solid var(--line); border-radius: 24px; padding: 32px 36px; min-width: 300px; }
 .metric-swap .m small { font-family: var(--mono); color: var(--bone-dim); }
@@ -158,10 +158,10 @@ section.chapter { min-height: 100vh; padding: 18vh 10vw 12vh; position: relative
 .why-grid p { color: var(--bone-dim); line-height: 1.8; margin: 0; }
 
 .end { display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; }
-.end-title { font-family: var(--serif); font-weight: 900; font-size: clamp(48px, 9vw, 140px); line-height: 1.15; margin: 0; }
+.end-title { font-family: var(--serif); font-weight: 900; font-size: clamp(48px, 9vw, 140px); line-height: 1.02; letter-spacing: -.03em; margin: 0; }
 .credits { font-family: var(--mono); font-size: 12px; color: var(--muted); margin-top: 60px; }
 
-/* 设置弹窗 */
+/* Settings dialog */
 .settings { border: 1px solid var(--line); border-radius: 20px; background: var(--ink-2); color: var(--bone); width: min(520px, 92vw); padding: 28px; }
 .settings::backdrop { background: rgba(0,0,0,.6); backdrop-filter: blur(4px); }
 .settings h3 { font-family: var(--serif); margin: 0 0 8px; font-size: 22px; }

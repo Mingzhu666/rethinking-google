@@ -1,5 +1,5 @@
-// 数据层：真实 API → 本地缓存 → 示例数据，三级回退。
-// 每个调用都返回 { data, source }，source ∈ 'live' | 'cache' | 'mock'。
+// Data layer with three-tier fallback: live API → local cache → sample data.
+// Every call returns { data, source }, where source is 'live' | 'cache' | 'mock'.
 
 const KEY_STORE = 'uh:keys';
 const CACHE_PREFIX = 'uh:cache:';
@@ -9,7 +9,7 @@ export function getKeys() {
 }
 export function setKeys(k) { localStorage.setItem(KEY_STORE, JSON.stringify(k)); }
 
-export const sourceLog = {}; // 最近一次各数据源的状态，供设置面板展示
+export const sourceLog = {}; // latest status per source, shown in the settings panel
 function mark(name, source) {
   sourceLog[name] = source;
   document.dispatchEvent(new CustomEvent('uh:source', { detail: { name, source } }));
@@ -24,13 +24,13 @@ function cacheGet(id) {
   try { return JSON.parse(localStorage.getItem(CACHE_PREFIX + id)); } catch { return null; }
 }
 function cacheSet(id, data) {
-  try { localStorage.setItem(CACHE_PREFIX + id, JSON.stringify(data)); } catch { /* 存储满了就算了 */ }
+  try { localStorage.setItem(CACHE_PREFIX + id, JSON.stringify(data)); } catch { /* storage full — skip */ }
 }
 export function clearCache() {
   Object.keys(localStorage).filter(k => k.startsWith(CACHE_PREFIX)).forEach(k => localStorage.removeItem(k));
 }
 
-// 通用：尝试真实请求，失败回退缓存，再回退 mock
+// Try live; on failure fall back to cache, then to sample data
 async function tiered(name, cacheId, liveFn, mockFn) {
   const keys = getKeys();
   if (!keys.offline) {
@@ -108,31 +108,31 @@ export async function gemini(name, prompt, mockFn) {
   }, mockFn);
 }
 
-// ---------- 免费公开 API（无需 key） ----------
+// ---------- Free public APIs (no key needed) ----------
 export async function weather(lat, lon, mockFn) {
   const id = `wx:${lat.toFixed(1)},${lon.toFixed(1)}:${new Date().toDateString()}`;
-  return tiered('Open-Meteo 天气', id, () =>
+  return tiered('Open-Meteo weather', id, () =>
     getJSON(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=temperature_2m,weather_code,is_day&timezone=auto`)
       .then(r => ({ temp: Math.round(r.current.temperature_2m), code: r.current.weather_code, isDay: r.current.is_day })),
     mockFn);
 }
 
 export async function cityName(lat, lon) {
-  const id = `city:${lat.toFixed(1)},${lon.toFixed(1)}`;
-  return tiered('城市反查', id, () =>
-    getJSON(`https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${lat}&longitude=${lon}&localityLanguage=zh`)
-      .then(r => r.city || r.locality || r.principalSubdivision || '你所在的城市'),
-    () => '上海');
+  const id = `city:en:${lat.toFixed(1)},${lon.toFixed(1)}`;
+  return tiered('Reverse geocoding', id, () =>
+    getJSON(`https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${lat}&longitude=${lon}&localityLanguage=en`)
+      .then(r => r.city || r.locality || r.principalSubdivision || 'your city'),
+    () => 'San Francisco');
 }
 
 export async function wikiRandom(mockFn) {
-  // 随机条目每次都不同，缓存键按天，保证当天离线也能复现
-  const id = 'wiki:rand:' + new Date().toDateString();
-  return tiered('Wikipedia 随机条目', id, async () => {
-    // 跳过消歧义页和太短的条目，最多试 4 次
+  // Random differs every call; cache per day so it replays offline
+  const id = 'wiki:en:rand:' + new Date().toDateString();
+  return tiered('Wikipedia random article', id, async () => {
+    // skip disambiguation pages and stubs, up to 4 tries
     let r;
     for (let i = 0; i < 4; i++) {
-      r = await getJSON('https://zh.wikipedia.org/api/rest_v1/page/random/summary');
+      r = await getJSON('https://en.wikipedia.org/api/rest_v1/page/random/summary');
       if (r.type !== 'disambiguation' && (r.extract || '').length > 40) break;
     }
     return { title: r.title, extract: r.extract, img: r.thumbnail?.source, url: r.content_urls?.desktop?.page };
@@ -141,19 +141,17 @@ export async function wikiRandom(mockFn) {
 
 export async function onThisDay(type, month, day, mockFn) {
   const mm = String(month).padStart(2, '0'), dd = String(day).padStart(2, '0');
-  const id = `otd:${type}:${mm}${dd}`;
-  return tiered('Wikipedia 历史上的今天', id, async () => {
-    let r;
-    try { r = await getJSON(`https://api.wikimedia.org/feed/v1/wikipedia/zh/onthisday/${type}/${mm}/${dd}`); }
-    catch { r = await getJSON(`https://en.wikipedia.org/api/rest_v1/feed/onthisday/${type}/${mm}/${dd}`); }
+  const id = `otd:en:${type}:${mm}${dd}`;
+  return tiered('Wikipedia on this day', id, async () => {
+    const r = await getJSON(`https://en.wikipedia.org/api/rest_v1/feed/onthisday/${type}/${mm}/${dd}`);
     const list = r[type] || [];
     if (!list.length) throw new Error('empty');
-    const isYear = t => /^(公元前)?\d+年?$/.test(t || '');
+    const isYear = t => /^\d+( BC)?$/.test(t || '');
     return list.map(e => {
       const page = (e.pages || []).find(p => !isYear(p.normalizedtitle || p.title));
       return {
         year: e.year, text: e.text,
-        name: page ? (page.normalizedtitle || page.title) : e.text.split(/[，,]/)[0],
+        name: page ? (page.normalizedtitle || page.title) : e.text.split(/[,，]/)[0],
         img: page?.thumbnail?.source,
       };
     });

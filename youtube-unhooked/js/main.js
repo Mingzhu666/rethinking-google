@@ -7,7 +7,7 @@ import { initReport, playReport } from './report.js';
 import { initBlindBox } from './blindbox.js';
 import { initCapsule } from './capsule.js';
 
-// ---------- Hero：无限下落的推荐流 ----------
+// ---------- Hero: an endlessly falling feed ----------
 function heroRain() {
   const pool = [...FEED, ...Object.values(ALTS)];
   const cols = window.innerWidth < 900 ? 3 : 6;
@@ -18,7 +18,7 @@ function heroRain() {
   }).join('');
 }
 
-// ---------- 滚动入场 ----------
+// ---------- Scroll reveals ----------
 function reveals() {
   const io = new IntersectionObserver(entries => entries.forEach(e => {
     if (!e.isIntersecting) return;
@@ -29,7 +29,7 @@ function reveals() {
     if (el.id === 'wrapped') playReport();
   }), { threshold: 0.25 });
   $$('.reveal, .objective, .yt-window, .wrapped').forEach(el => io.observe(el));
-  // hero 的数字
+  // hero counter
   setTimeout(() => countUp($('.hero-title .num'), 47, { dur: 2200 }), 600);
 
   const nav = new IntersectionObserver(entries => entries.forEach(e => {
@@ -39,7 +39,7 @@ function reveals() {
   ['problem', 'ch-anti', 'ch-box', 'ch-capsule', 'ch-metric'].forEach(id => nav.observe($('#' + id)));
 }
 
-// ---------- 演讲模式：方向键 / 空格切换下一屏 ----------
+// ---------- Presenter mode: arrow keys / space jump between screens ----------
 function presenter() {
   const stops = $$('.stop');
   const current = () => {
@@ -59,23 +59,23 @@ function presenter() {
   });
 }
 
-// ---------- 数据源设置 ----------
+// ---------- Data source settings ----------
 function settings() {
   const dlg = $('#settings');
   const fill = () => {
     const k = getKeys();
     $('#k-yt').value = k.yt || ''; $('#k-gm').value = k.gm || ''; $('#k-model').value = k.model || ''; $('#k-offline').checked = !!k.offline;
-    const names = ['YouTube Data API', 'Gemini 反兴趣画像', 'Gemini 观看记录分类', 'Gemini 盲盒策展', 'Open-Meteo 天气', 'Wikipedia 随机条目', 'Wikipedia 历史上的今天'];
-    const txt = { live: '● 实时', cache: '● 缓存', mock: '○ 示例' };
-    $('#src-list').innerHTML = names.map(n => `<li><span>${n}</span><span>${txt[sourceLog[n]] || '— 未调用'}</span></li>`).join('');
+    const names = ['YouTube Data API', 'Gemini anti-interest profile', 'Gemini history classifier', 'Gemini blind box curator', 'Open-Meteo weather', 'Wikipedia random article', 'Wikipedia on this day'];
+    const txt = { live: '● live', cache: '● cached', mock: '○ sample' };
+    $('#src-list').innerHTML = names.map(n => `<li><span>${n}</span><span>${txt[sourceLog[n]] || '— not called yet'}</span></li>`).join('');
   };
   $('#open-settings').addEventListener('click', () => { fill(); dlg.showModal(); });
   $('#save-keys').addEventListener('click', () => {
     setKeys({ yt: $('#k-yt').value.trim(), gm: $('#k-gm').value.trim(), model: $('#k-model').value.trim(), offline: $('#k-offline').checked });
     refreshStatus();
-    toast('已保存。刷新页面后所有模块会用新设置');
+    toast('Saved. Reload the page to apply to every module.');
   });
-  $('#clear-cache').addEventListener('click', () => { clearCache(); toast('缓存已清空'); });
+  $('#clear-cache').addEventListener('click', () => { clearCache(); toast('Cache cleared'); });
   document.addEventListener('uh:source', refreshStatus);
   refreshStatus();
 }
@@ -83,10 +83,10 @@ function refreshStatus() {
   const k = getKeys();
   const dot = $('#global-status');
   const text = $('#global-status-text');
-  if (k.offline) { dot.className = 'status-dot'; text.textContent = '保险模式'; return; }
+  if (k.offline) { dot.className = 'status-dot'; text.textContent = 'Safe demo mode'; return; }
   const both = k.yt && k.gm;
   dot.className = 'status-dot ' + (both ? 'live' : k.yt || k.gm ? 'partial' : '');
-  text.textContent = both ? '实时数据' : k.yt || k.gm ? '部分实时' : '示例数据 · 设置 key';
+  text.textContent = both ? 'Live data' : k.yt || k.gm ? 'Partly live' : 'Sample data · add keys';
 }
 
 heroRain();

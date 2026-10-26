@@ -1,30 +1,29 @@
 <!doctype html>
-<html lang="zh-CN">
+<html lang="en">
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>YouTube Unhooked — 把推荐目标从「最大化观看」改为「最小化后悔」</title>
+<title>YouTube Unhooked — Optimize for regret, not watch time</title>
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=IBM+Plex+Mono:wght@400;500&family=Noto+Sans+SC:wght@400;500;700&family=Noto+Serif+SC:wght@500;700;900&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700;9..144,900&family=Geist:wght@400;500;700;900&family=IBM+Plex+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet" />
 <link rel="stylesheet" href="css/shell.css" />
 <link rel="stylesheet" href="css/app.css" />
 </head>
 <body>
 <div class="grain" aria-hidden="true"></div>
 
-<!-- 顶部导航 -->
 <header class="topbar">
   <a class="brand" href="#hero"><span class="brand-dot"></span>Unhooked <em>for YouTube</em></a>
-  <nav class="chapters" aria-label="章节">
-    <a href="#problem">00 问题</a>
-    <a href="#ch-anti">01 反兴趣</a>
-    <a href="#ch-box">02 盲盒</a>
-    <a href="#ch-capsule">03 时间胶囊</a>
-    <a href="#ch-metric">04 新指标</a>
+  <nav class="chapters" aria-label="Chapters">
+    <a href="#problem">00 Problem</a>
+    <a href="#ch-anti">01 Anti-interest</a>
+    <a href="#ch-box">02 Blind box</a>
+    <a href="#ch-capsule">03 Time capsule</a>
+    <a href="#ch-metric">04 New metric</a>
   </nav>
-  <button class="pill-btn" id="open-settings" aria-label="数据源设置">
-    <span class="status-dot" id="global-status"></span><span id="global-status-text">数据源</span>
+  <button class="pill-btn" id="open-settings" aria-label="Data sources">
+    <span class="status-dot" id="global-status"></span><span id="global-status-text">Data sources</span>
   </button>
 </header>
 
@@ -33,67 +32,67 @@
 <section id="hero" class="stop hero">
   <div class="feed-rain" id="feed-rain" aria-hidden="true"></div>
   <div class="hero-inner">
-    <p class="kicker reveal">一份给 YouTube 的产品提案 · 2026</p>
-    <h1 class="hero-title reveal">你昨晚看了 <span class="num trap" data-count="47">0</span> 个视频。</h1>
-    <h2 class="hero-sub reveal" style="--d:1.4s">你还记得其中几个？</h2>
+    <p class="kicker reveal">A product proposal for YouTube · 2026</p>
+    <h1 class="hero-title reveal">Last night you watched <span class="num trap" data-count="47">0</span> videos.</h1>
+    <h2 class="hero-sub reveal" style="--d:1.4s">How many do you remember?</h2>
   </div>
-  <div class="scroll-cue">向下滚动 · 或按 <kbd>→</kbd> 进入演示</div>
+  <div class="scroll-cue">Scroll · or press <kbd>→</kbd> to begin</div>
 </section>
 
-<!-- 问题 -->
+<!-- PROBLEM -->
 <section id="problem" class="stop chapter">
   <div class="big-stat reveal">
     <span class="stat-num">70<small>%+</small></span>
-    <p>的 YouTube 观看时长来自推荐算法。<cite>— Neal Mohan, CES 2018</cite></p>
+    <p>of watch time on YouTube comes from the recommendation algorithm.<cite>— Neal Mohan, CES 2018</cite></p>
   </div>
-  <p class="lede reveal">算法非常擅长一件事：<b>预测你会点开什么</b>。<br/>但它从来不问：<span class="trap">你看完，会不会后悔？</span></p>
+  <p class="lede reveal">The algorithm is brilliant at one thing: <b>predicting what you'll click.</b><br/>It never asks: <span class="trap">will you regret it?</span></p>
 </section>
 
 <section id="objective" class="stop chapter">
-  <p class="kicker reveal">洞察：问题不在算法太聪明，而在目标函数</p>
+  <p class="kicker reveal">Insight: the algorithm isn't too smart. It's optimizing the wrong thing.</p>
   <div class="objective reveal">
     <div class="obj-line old"><span class="kw">maximize</span> Σ watch_time(user, video)</div>
     <div class="obj-line new"><span class="kw">minimize</span> Σ regret(user, video)</div>
   </div>
-  <p class="lede small reveal">Unhooked 是三个让选择权回到人手里的功能 —— 由<b>你想成为的自己</b>、<b>外部世界</b>、<b>过去</b>来决定你看什么。</p>
+  <p class="lede small reveal">Unhooked is three features that hand the choice back to people — letting <b>the person you want to become</b>, <b>the outside world</b>, and <b>the past</b> decide what you watch.</p>
   <div class="trio reveal">
-    <a href="#ch-anti" class="trio-card"><span>01</span><h3>反兴趣画像</h3><p>“你会喜欢，但你会后悔”</p></a>
-    <a href="#ch-box" class="trio-card"><span>02</span><h3>盲盒频道</h3><p>今天由天气和陌生人替你选</p></a>
-    <a href="#ch-capsule" class="trio-card"><span>03</span><h3>时间胶囊</h3><p>只看一年前的今天</p></a>
+    <a href="#ch-anti" class="trio-card"><span>01</span><h3>Anti-interest profile</h3><p>“You'd like it. You'd also regret it.”</p></a>
+    <a href="#ch-box" class="trio-card"><span>02</span><h3>Blind box channel</h3><p>Today, the weather and a stranger pick for you.</p></a>
+    <a href="#ch-capsule" class="trio-card"><span>03</span><h3>Time capsule</h3><p>Only what was uploaded on this day, years ago.</p></a>
   </div>
 </section>
 
-<!-- 01 反兴趣画像 -->
+<!-- 01 ANTI-INTEREST -->
 <section id="ch-anti" class="stop chapter chapter-intro">
   <span class="ch-no">01</span>
-  <h2 class="ch-title reveal">推荐系统只学习你喜欢什么。<br/><span class="calm">Unhooked 还学习：你不想成为谁。</span></h2>
-  <p class="lede small reveal">用户主动标注“我不想成为的人”，AI 建立一份<b>反兴趣画像</b>，在推荐时主动过滤“你会喜欢，但会后悔”的内容。</p>
+  <h2 class="ch-title reveal">Recommenders learn what you like.<br/><span class="calm">Unhooked also learns who you don't want to become.</span></h2>
+  <p class="lede small reveal">You name the person you don't want to be. AI builds an <b>anti-interest profile</b> and quietly filters out what you'd enjoy — and regret.</p>
 </section>
 
 <section id="demo-anti" class="stop demo-stage">
   <div class="yt-window" data-era="now">
     <div class="yt-top">
-      <div class="yt-logo"><span class="yt-play"></span>YouTube<sup>CN</sup><span class="unhooked-tag">Unhooked</span></div>
-      <div class="yt-search"><span>搜索</span><i></i></div>
-      <div class="mode-switch" role="group" aria-label="推荐模式">
-        <button data-mode="algo">原版算法</button>
+      <div class="yt-logo"><span class="yt-play"></span>YouTube<span class="unhooked-tag">Unhooked</span></div>
+      <div class="yt-search"><span>Search</span><i></i></div>
+      <div class="mode-switch" role="group" aria-label="Recommendation mode">
+        <button data-mode="algo">Today's algorithm</button>
         <button data-mode="unhooked" class="on">Unhooked</button>
       </div>
     </div>
     <div class="yt-body">
       <aside class="yt-side">
-        <a class="on">首页</a><a href="#demo-takeout">陷阱地图</a><a href="#ch-box">盲盒频道</a><a href="#ch-capsule">时间胶囊</a><a href="#report">每周报告</a>
+        <a class="on">Home</a><a href="#demo-takeout">Trap map</a><a href="#ch-box">Blind box</a><a href="#ch-capsule">Time capsule</a><a href="#report">Weekly report</a>
       </aside>
       <div class="yt-main">
         <div class="anti-panel">
           <div class="anti-head">
-            <h3>我不想成为……</h3>
-            <div class="shield-count"><b id="blocked-n">0</b> 个陷阱已挡下 · 预计省下 <b id="saved-min">0</b> 分钟</div>
+            <h3>I don't want to become…</h3>
+            <div class="shield-count"><b id="blocked-n">0</b> traps blocked · about <b id="saved-min">0</b> minutes saved</div>
           </div>
           <div class="chips" id="anti-chips"></div>
           <form class="custom-anti" id="custom-anti">
-            <input id="custom-anti-input" placeholder="用一句话写下你不想成为的人，比如：一边吃饭一边看吵架视频的人" maxlength="60" />
-            <button type="submit">加入画像</button>
+            <input id="custom-anti-input" placeholder="In one sentence: someone who watches people argue while eating dinner" maxlength="80" />
+            <button type="submit">Add to profile</button>
             <span class="src-badge" id="anti-src"></span>
           </form>
         </div>
@@ -107,51 +106,51 @@
   <div class="yt-window">
     <div class="yt-top">
       <div class="yt-logo"><span class="yt-play"></span>YouTube<span class="unhooked-tag">Unhooked</span></div>
-      <div class="crumb">反兴趣画像 · 陷阱地图</div>
+      <div class="crumb">Anti-interest profile · Trap map</div>
     </div>
     <div class="takeout">
       <div class="takeout-left">
-        <h3>用你的真实观看记录诊断</h3>
-        <p class="muted">从 <a href="https://takeout.google.com/" target="_blank" rel="noopener">Google Takeout</a> 导出 YouTube 历史记录（JSON 或 HTML），拖到这里。<b>文件只在你的浏览器里分析，不会上传。</b></p>
+        <h3>Diagnose your real watch history</h3>
+        <p class="muted">Export your YouTube history from <a href="https://takeout.google.com/" target="_blank" rel="noopener">Google Takeout</a> (JSON or HTML) and drop it here. <b>It's analyzed in your browser and never uploaded.</b></p>
         <label class="dropzone" id="dropzone">
           <input type="file" id="takeout-file" accept=".json,.html" hidden />
           <span class="dz-icon">⇣</span>
-          <span>拖入 <code>watch-history.json</code> / <code>.html</code></span>
-          <small>或点击选择文件</small>
+          <span>Drop <code>watch-history.json</code> / <code>.html</code></span>
+          <small>or click to choose a file</small>
         </label>
-        <button class="ghost-btn" id="use-persona">使用示例人设：林一，28 岁产品经理（8 周记录）</button>
+        <button class="ghost-btn" id="use-persona">Use a sample persona: Alex, 28, product manager (8 weeks of history)</button>
         <div class="analyze-log" id="analyze-log"></div>
       </div>
       <div class="takeout-right" id="trap-map">
-        <div class="empty-map">等待观看记录……</div>
+        <div class="empty-map">Waiting for watch history…</div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- 每周报告 -->
+<!-- WEEKLY REPORT -->
 <section id="report" class="stop chapter report-stage">
-  <p class="kicker reveal">每周日早上，你会收到一份报告</p>
+  <p class="kicker reveal">Every Sunday morning, you get a report</p>
   <div class="wrapped" id="wrapped">
-    <div class="wrap-card w1"><small>本周你抵抗了</small><b class="num" data-count="23" id="w-resist">0</b><span>次多巴胺陷阱</span></div>
-    <div class="wrap-card w2"><small>省下了</small><b><span class="num" data-count="4.2" data-dec="1" id="w-hours">0</span><i>小时</i></b><span>够看完 2 部纪录片</span></div>
-    <div class="wrap-card w3"><small>最危险的时刻</small><b id="w-danger">周三 01:12</b><span id="w-danger-sub">你差点开始一次深夜连播</span></div>
-    <div class="wrap-card w4"><small>后悔率</small><b><span id="w-regret-old">38%</span> → <span class="calm" id="w-regret-new">12%</span></b><span>每周日问一次：“这周看的，值得吗？”</span></div>
+    <div class="wrap-card w1"><small>This week you resisted</small><b class="num" data-count="23" id="w-resist">0</b><span>dopamine traps</span></div>
+    <div class="wrap-card w2"><small>You saved</small><b><span class="num" data-count="4.2" data-dec="1" id="w-hours">0</span><i>hours</i></b><span>Enough for two documentaries</span></div>
+    <div class="wrap-card w3"><small>Your riskiest moment</small><b id="w-danger">Wed 1:12 AM</b><span id="w-danger-sub">You almost started a late-night binge</span></div>
+    <div class="wrap-card w4"><small>Regret rate</small><b><span id="w-regret-old">38%</span> → <span class="calm" id="w-regret-new">12%</span></b><span>One question every Sunday: “Was this week's watching worth it?”</span></div>
   </div>
-  <button class="pill-btn big" id="share-report">生成分享卡片 ↗</button>
+  <button class="pill-btn big" id="share-report">Save as share card ↗</button>
 </section>
 
-<!-- 02 盲盒 -->
+<!-- 02 BLIND BOX -->
 <section id="ch-box" class="stop chapter chapter-intro">
   <span class="ch-no">02</span>
-  <h2 class="ch-title reveal">如果推荐<span class="calm">不由你的历史</span>决定呢？</h2>
-  <p class="lede small reveal">盲盒频道的内容由外部世界决定：今天的日期、你所在城市的天气、一个陌生人的生日、一条维基百科随机条目。每天一次，并告诉你“为什么今天给你看这个”。</p>
+  <h2 class="ch-title reveal">What if your feed <span class="calm">wasn't decided by your history</span> at all?</h2>
+  <p class="lede small reveal">The blind box channel is programmed by the outside world: today's date, the weather where you are, a stranger's birthday, a random Wikipedia article. Once a day — and it always tells you <b>why you're seeing this today.</b></p>
 </section>
 
 <section id="demo-box" class="stop demo-stage">
   <div class="yt-window box-window">
     <div class="yt-top">
-      <div class="yt-logo"><span class="yt-play"></span>YouTube<span class="unhooked-tag">盲盒频道</span></div>
+      <div class="yt-logo"><span class="yt-play"></span>YouTube<span class="unhooked-tag">Blind box</span></div>
       <div class="crumb" id="box-date"></div>
       <span class="src-badge" id="box-src"></span>
     </div>
@@ -163,76 +162,76 @@
         <div class="clue" data-k="wiki"><div class="clue-in"><div class="clue-back">?</div><div class="clue-front"></div></div></div>
       </div>
       <div class="box-cta">
-        <button class="open-box" id="open-box">打开今天的盲盒</button>
-        <p class="muted" id="box-hint">今天只能开一次。外部世界已经准备好了。</p>
+        <button class="open-box" id="open-box">Open today's box</button>
+        <p class="muted" id="box-hint">One box a day. The world has already chosen.</p>
       </div>
       <div class="playlist" id="playlist"></div>
     </div>
   </div>
 </section>
 
-<!-- 03 时间胶囊 -->
+<!-- 03 TIME CAPSULE -->
 <section id="ch-capsule" class="stop chapter chapter-intro">
   <span class="ch-no">03</span>
-  <h2 class="ch-title reveal">时间胶囊：只看<span class="calm">一年前的今天</span>。</h2>
-  <p class="lede small reveal">一个独立入口，只展示一年前、三年前、五年前同一天上传的视频。没有“为你推荐”，只有那一天的世界。</p>
+  <h2 class="ch-title reveal">Time capsule: only <span class="calm">this day, years ago.</span></h2>
+  <p class="lede small reveal">A separate entrance that only shows videos uploaded on this exact date one, three, five, or ten years ago. No “recommended for you” — just the world as it was that day.</p>
 </section>
 
 <section id="demo-capsule" class="stop demo-stage">
-  <div class="capsule-dial" id="capsule-dial" role="group" aria-label="选择年份">
-    <button data-y="1" class="on">1 年前</button><button data-y="3">3 年前</button><button data-y="5">5 年前</button><button data-y="10">10 年前</button>
+  <div class="capsule-dial" id="capsule-dial" role="group" aria-label="Pick a year">
+    <button data-y="1" class="on">1 year ago</button><button data-y="3">3 years</button><button data-y="5">5 years</button><button data-y="10">10 years</button>
   </div>
   <div class="yt-window capsule-window" id="capsule-window" data-era="1">
     <div class="yt-top">
-      <div class="yt-logo"><span class="yt-play"></span>YouTube<span class="unhooked-tag">时间胶囊</span></div>
+      <div class="yt-logo"><span class="yt-play"></span>YouTube<span class="unhooked-tag">Time capsule</span></div>
       <div class="capsule-date" id="capsule-date"></div>
       <span class="src-badge" id="capsule-src"></span>
     </div>
     <div class="capsule-body">
       <div class="world-strip" id="world-strip"></div>
       <div class="capsule-grid" id="capsule-grid"></div>
-      <p class="capsule-note">按至今播放量排序 · YouTube Data API 仅提供当前统计，无法还原“当日热度”</p>
+      <p class="capsule-note">Sorted by all-time views · the YouTube Data API only exposes current stats, not how popular a video was that day</p>
     </div>
   </div>
 </section>
 
-<!-- 04 新指标 -->
+<!-- 04 NEW METRIC -->
 <section id="ch-metric" class="stop chapter">
   <span class="ch-no">04</span>
-  <h2 class="ch-title reveal">一个新的北极星指标</h2>
+  <h2 class="ch-title reveal">A new north star</h2>
   <div class="metric-swap reveal">
-    <div class="m old"><small>今天</small><b>观看时长</b><span>Watch time</span></div>
+    <div class="m old"><small>Today</small><b>Watch time</b><span>Minutes watched</span></div>
     <div class="arrow">→</div>
-    <div class="m new"><small>Unhooked</small><b>值得率</b><span>Worth-it rate = 看完说“值得”的会话 / 全部会话</span></div>
+    <div class="m new"><small>Unhooked</small><b>Worth-it rate</b><span>Sessions rated “worth it” / all sessions</span></div>
   </div>
   <div class="why-grid reveal">
-    <div><h4>“这不就是降低观看时长吗？”</h4><p>短期会。但后悔会累积成卸载、限时和信任流失。值得率衡量的是用户十年后还在不在。</p></div>
-    <div><h4>商业上的回应</h4><p>反兴趣画像是 YouTube Premium 的天然差异化卖点：广告主买的是注意力，会员买的是对注意力的掌控。</p></div>
-    <div><h4>监管顺风</h4><p>欧盟 DSA 要求大型平台提供不基于画像的推荐选项。盲盒频道和时间胶囊就是有趣的合规答案。</p></div>
-    <div><h4>如何验证</h4><p>A/B 测试：实验组开启反兴趣画像，看 90 天留存、每周值得率、Premium 转化，而不只看日活时长。</p></div>
+    <div><h4>“Doesn't this just cut watch time?”</h4><p>In the short run, yes. But regret compounds into uninstalls, screen-time limits, and lost trust. Worth-it rate measures whether people are still here in ten years.</p></div>
+    <div><h4>The business case</h4><p>The anti-interest profile is a natural YouTube Premium differentiator: advertisers buy attention, members pay for control over it.</p></div>
+    <div><h4>Regulatory tailwind</h4><p>The EU's DSA requires very large platforms to offer a feed that isn't based on profiling. Blind box and time capsule are compliance that people actually want to use.</p></div>
+    <div><h4>How we'd prove it</h4><p>A/B test: the treatment group gets the anti-interest profile. Measure 90-day retention, weekly worth-it rate, and Premium conversion — not just daily watch time.</p></div>
   </div>
 </section>
 
 <section id="end" class="stop chapter end">
-  <h2 class="end-title reveal">把选择权，<br/>还给人。</h2>
+  <h2 class="end-title reveal">Give the choice<br/>back to people.</h2>
   <p class="credits reveal">Built with YouTube Data API v3 · Gemini API · Open-Meteo · Wikimedia REST API</p>
 </section>
 </main>
 
-<!-- 设置面板 -->
+<!-- SETTINGS -->
 <dialog id="settings" class="settings">
   <form method="dialog">
-    <h3>数据源</h3>
-    <p class="muted">密钥只存在本机浏览器（localStorage）。所有真实请求都会自动缓存，断网或额度用完时无缝回退到缓存，再回退到示例数据。</p>
+    <h3>Data sources</h3>
+    <p class="muted">Keys are stored only in this browser (localStorage). Every live response is cached, so if the network drops or quota runs out the demo falls back to the cache, then to sample data.</p>
     <label>YouTube Data API key<input id="k-yt" autocomplete="off" placeholder="AIza…" /></label>
     <label>Gemini API key<input id="k-gm" autocomplete="off" placeholder="AIza…" /></label>
-    <label>Gemini 模型<input id="k-model" autocomplete="off" placeholder="gemini-2.5-flash" /></label>
-    <label class="check"><input type="checkbox" id="k-offline" /> 演示保险模式：只用缓存和示例数据，不发真实请求</label>
+    <label>Gemini model<input id="k-model" autocomplete="off" placeholder="gemini-2.5-flash" /></label>
+    <label class="check"><input type="checkbox" id="k-offline" /> Safe demo mode: use cache and sample data only, no live requests</label>
     <ul class="src-list" id="src-list"></ul>
     <div class="row">
-      <button value="cancel" class="ghost-btn">关闭</button>
-      <button id="clear-cache" type="button" class="ghost-btn">清空缓存</button>
-      <button id="save-keys" value="default" class="pill-btn">保存</button>
+      <button value="cancel" class="ghost-btn">Close</button>
+      <button id="clear-cache" type="button" class="ghost-btn">Clear cache</button>
+      <button id="save-keys" value="default" class="pill-btn">Save</button>
     </div>
   </form>
 </dialog>

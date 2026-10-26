@@ -1,8 +1,8 @@
-/* ===== YouTube 原生质感窗口 ===== */
+/* ===== YouTube-native window ===== */
 .yt-window {
   --yt-bg: #ffffff; --yt-fg: #0f0f0f; --yt-sub: #606060; --yt-chip: #f2f2f2; --yt-line: #e5e5e5; --yt-red: #ff0033;
   position: relative; width: min(1280px, 100%); background: var(--yt-bg); color: var(--yt-fg);
-  border-radius: 18px; overflow: hidden; font-family: Roboto, "Noto Sans SC", sans-serif;
+  border-radius: 18px; overflow: hidden; font-family: Roboto, "Geist", sans-serif;
   box-shadow: 0 40px 120px rgba(0,0,0,.6), 0 0 0 1px rgba(255,255,255,.08);
   opacity: 0; transform: perspective(1400px) rotateX(10deg) translateY(60px) scale(.96);
   transition: opacity 1s, transform 1.2s cubic-bezier(.2,.8,.2,1), filter 1.2s;
@@ -36,7 +36,7 @@
 .yt-side a.on { background: var(--yt-chip); font-weight: 500; }
 .yt-main { padding: 20px 24px 28px; }
 
-/* 反兴趣面板 */
+/* Anti-interest panel */
 .anti-panel { background: #0f0f0f; color: #fff; border-radius: 16px; padding: 18px 20px; margin-bottom: 22px; }
 .anti-head { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
 .anti-head h3 { margin: 0; font-family: var(--serif); font-size: 20px; }
@@ -52,11 +52,11 @@
 .custom-anti button { background: #fff; color: #0f0f0f; border: 0; border-radius: 999px; padding: 9px 16px; font: inherit; font-size: 13px; font-weight: 500; cursor: pointer; }
 .custom-anti button[disabled] { opacity: .5; }
 
-/* 视频卡片 */
+/* Video cards */
 .feed-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 24px 16px; }
 .vcard { position: relative; cursor: default; }
 .vcard .thumb-wrap { position: relative; border-radius: 12px; overflow: hidden; }
-.thumb { aspect-ratio: 16/9; display: flex; align-items: flex-end; padding: 10px; position: relative; overflow: hidden; color: #fff; font-weight: 900; font-family: "Noto Sans SC", sans-serif; font-size: clamp(13px, 1.3vw, 19px); line-height: 1.15; text-shadow: 0 2px 8px rgba(0,0,0,.4); background-size: cover; background-position: center; }
+.thumb { aspect-ratio: 16/9; display: flex; align-items: flex-end; padding: 10px; position: relative; overflow: hidden; color: #fff; font-weight: 900; font-family: "Geist", sans-serif; text-transform: uppercase; letter-spacing: -.01em; font-size: clamp(13px, 1.3vw, 19px); line-height: 1.15; text-shadow: 0 2px 8px rgba(0,0,0,.4); background-size: cover; background-position: center; }
 .thumb img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
 .thumb .tt { position: relative; z-index: 1; max-width: 85%; }
 .thumb.loud .tt { color: #ffe600; -webkit-text-stroke: .5px #000; font-size: clamp(15px, 1.6vw, 24px); }
@@ -69,7 +69,7 @@
 .algo-why { margin-top: 6px; font-size: 11px; font-family: var(--mono); color: #c00; display: none; }
 .mode-algo .algo-why { display: block; }
 
-/* 拦截态 */
+/* Blocked state */
 .vcard .block-layer { position: absolute; inset: 0; border-radius: 12px; z-index: 3; background: rgba(15,15,15,.88); color: #fff; padding: 12px; display: flex; flex-direction: column; justify-content: space-between; opacity: 0; pointer-events: none; transition: opacity .4s; }
 .vcard.blocked .block-layer { opacity: 1; pointer-events: auto; }
 .vcard.blocked .thumb { filter: grayscale(1) blur(2px); }
@@ -84,7 +84,7 @@
 @keyframes flipin { from { transform: rotateY(90deg); } to { transform: none; } }
 .vcard .alt-tag { position: absolute; top: 8px; left: 8px; z-index: 2; background: var(--calm); color: #0f0f0f; font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 4px; }
 
-/* 陷阱地图 */
+/* Trap map */
 .takeout { display: grid; grid-template-columns: 340px 1fr; min-height: 620px; }
 .takeout-left { padding: 28px; border-right: 1px solid var(--yt-line); display: flex; flex-direction: column; gap: 14px; }
 .takeout-left h3 { font-family: var(--serif); font-size: 22px; margin: 0; }
@@ -111,14 +111,14 @@
 .heat .lbl { display: flex; align-items: center; }
 .heat .hr { text-align: center; }
 .cats { margin-top: 24px; display: grid; gap: 10px; }
-.cat-row { display: grid; grid-template-columns: 180px 1fr 54px; align-items: center; gap: 12px; font-size: 13px; }
+.cat-row { display: grid; grid-template-columns: 300px 1fr 54px; align-items: center; gap: 12px; font-size: 13px; }
 .cat-bar { height: 10px; background: #f1f1f1; border-radius: 999px; overflow: hidden; }
 .cat-bar i { display: block; height: 100%; width: 0; border-radius: 999px; transition: width 1.2s cubic-bezier(.2,.8,.2,1); }
 .cat-row b { font-family: var(--mono); font-weight: 500; text-align: right; }
 .spiral { margin-top: 22px; padding: 14px 16px; border-radius: 14px; background: #0f0f0f; color: #ddd; font-size: 13px; line-height: 1.7; }
 .spiral b { color: var(--trap); }
 
-/* 盲盒 */
+/* Blind box */
 .box-window { background: #fbf8f2; }
 .box-body { padding: 32px; }
 .clue-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px; perspective: 1200px; }
@@ -158,7 +158,7 @@
 .curating::after { content: "▍"; animation: blink 1s steps(2) infinite; }
 @keyframes blink { 50% { opacity: 0; } }
 
-/* 时间胶囊 */
+/* Time capsule */
 .capsule-dial { position: relative; z-index: 2; display: flex; gap: 6px; background: rgba(239,232,218,.08); border: 1px solid var(--line); border-radius: 999px; padding: 5px; margin-bottom: 26px; }
 .capsule-dial button { font-family: var(--mono); font-size: 13px; color: var(--bone-dim); background: transparent; border: 0; padding: 9px 20px; border-radius: 999px; cursor: pointer; transition: all .3s; }
 .capsule-dial button.on { background: var(--bone); color: var(--ink); }
@@ -172,7 +172,7 @@
 .capsule-grid .vcard.in { opacity: 1; transform: none; }
 .capsule-note { font-family: var(--mono); font-size: 11px; color: #999; text-align: center; margin: 24px 0 0; }
 
-/* 年代皮肤 */
+/* Era skins */
 .capsule-window { transition: background .8s, border-radius .8s, filter .8s; }
 .capsule-window[data-era="3"] .capsule-body { filter: saturate(.85); }
 .capsule-window[data-era="5"] { --yt-red: #e62117; border-radius: 6px; }

@@ -1,13 +1,13 @@
-// 01 反兴趣画像：标注“我不想成为的人”，推荐流里实时拦截。
+// 01 Anti-interest profile: name who you don't want to become, and the feed blocks it live.
 import { TRAPS, FEED, ALTS } from './data.js';
 import { gemini } from './api.js';
 import { $, $$, cardHTML, countUp, esc, setBadge, toast } from './ui.js';
 
 const state = {
   mode: 'unhooked',
-  active: new Set(['rage']),   // 开场默认勾一个，让第一眼就有拦截效果
+  active: new Set(['rage']),   // one on by default, so the first frame already shows a block
   custom: [],                  // { id, label, matches: Map<feedIndex, reason> }
-  swapped: new Map(),          // feedIndex → 替代视频
+  swapped: new Map(),          // feedIndex → replacement video
 };
 
 const durMin = d => { const p = d.split(':').map(Number); return p.length === 3 ? p[0] * 60 + p[1] : p[0] + p[1] / 60; };
@@ -44,12 +44,12 @@ function renderChips() {
 function renderFeed() {
   $('#feed').innerHTML = FEED.map((v, i) => {
     const shown = state.swapped.get(i) || v;
-    const altTag = state.swapped.has(i) ? `<span class="alt-tag">替你换了一个</span>` : '';
+    const altTag = state.swapped.has(i) ? `<span class="alt-tag">Swapped for you</span>` : '';
     return `<div class="vcard ${state.swapped.has(i) ? 'swapped' : ''}" data-i="${i}">
       ${cardHTML(shown, altTag)}
-      ${v.trap && !state.swapped.has(i) ? `<div class="algo-why">点击预测 ${v.click}% → 推荐</div>` : ''}
+      ${v.trap && !state.swapped.has(i) ? `<div class="algo-why">Click probability ${v.click}% → recommend</div>` : ''}
       ${state.swapped.has(i) ? `<div class="algo-why" style="display:block;color:#0a7a3e">${esc(shown.altWhy)}</div>` : ''}
-      <div class="block-layer"><span class="stamp">已挡下</span><p class="why-text"></p><button data-swap="${i}">换一个更好的</button></div>
+      <div class="block-layer"><span class="stamp">Blocked</span><p class="why-text"></p><button data-swap="${i}">Show me something better</button></div>
     </div>`;
   }).join('');
   $$('[data-swap]').forEach(b => b.addEventListener('click', () => swap(+b.dataset.swap)));
@@ -74,8 +74,8 @@ function update(silent) {
     if (r) {
       n++; min += durMin(v.duration);
       $('.why-text', card).innerHTML = r.text
-        ? `${esc(r.text)}<br/><b>画像：不想成为「${esc(r.label)}」</b>`
-        : `你大概率会点开（预测 <b>${v.click ?? 70}%</b>），但相似用户中 <b>${v.regret ?? 60}%</b> 看完后说后悔。<br/><b>画像：不想成为「${esc(r.label)}」</b>`;
+        ? `${esc(r.text)}<br/><b>Profile: not “${esc(r.label)}”</b>`
+        : `You'd probably click (<b>${v.click ?? 70}%</b> predicted), but <b>${v.regret ?? 60}%</b> of similar viewers said they regretted it.<br/><b>Profile: not “${esc(r.label)}”</b>`;
       if (!was) { const s = $('.stamp', card); s.style.animation = 'none'; s.offsetWidth; s.style.animation = ''; }
     }
   });
@@ -85,46 +85,60 @@ function update(silent) {
 
 function swap(i) {
   const v = FEED[i];
-  const alt = ALTS[v.trap] || ALTS.bait;
-  state.swapped.set(i, alt);
+  state.swapped.set(i, ALTS[v.trap] || ALTS.bait);
   renderFeed();
 }
 
-// 自定义一句话 → Gemini 判断推荐流里哪些视频属于“你不想成为的人”
+// A sentence in the user's own words → Gemini decides which feed items move them toward that person
 async function onCustom(e) {
   e.preventDefault();
   const input = $('#custom-anti-input');
   const text = input.value.trim();
-  if (!text) { toast('先写一句你不想成为的人'); return; }
+  if (!text) { toast('Write one sentence about who you don\'t want to become'); return; }
   const btn = $('#custom-anti button');
-  btn.disabled = true; btn.textContent = '分析中…';
+  btn.disabled = true; btn.textContent = 'Thinking…';
 
-  const list = FEED.map((v, i) => `${i}. ${v.title}（${v.channel}，${v.duration}）`).join('\n');
-  const prompt = `你是 YouTube 的“反兴趣画像”引擎。用户说他不想成为这样的人：「${text}」。
-下面是算法给他的首页推荐：
+  const list = FEED.map((v, i) => `${i}. ${v.title} (${v.channel}, ${v.duration})`).join('\n');
+  const prompt = `You are YouTube's "anti-interest profile" engine. The user says they don't want to become: "${text}".
+Here is their algorithmic home feed:
 ${list}
-请找出会让他“越来越像那个人”的视频（只挑明显相关的，0~5 个）。用第二人称写一句不超过 40 字、克制温和的拦截理由。
-同时把用户这句话压缩成一个不超过 12 字的画像标签。
-只返回 JSON：{"label": string, "matches": [{"index": number, "reason": string}]}`;
+Pick the videos that would make them more like that person (only clear matches, 0–5 items). For each, write a calm, kind, second-person reason in English, max 25 words.
+Also compress the user's sentence into a profile label of max 6 words, phrased as a person (e.g. "Someone who argues at dinner").
+Return JSON only: {"label": string, "matches": [{"index": number, "reason": string}]}`;
 
-  const { data, source } = await gemini('Gemini 反兴趣画像', prompt, () => mockMatch(text));
+  const { data, source } = await gemini('Gemini anti-interest profile', prompt, () => mockMatch(text));
   setBadge($('#anti-src'), source);
   const matches = new Map((data.matches || []).filter(m => FEED[m.index]).map(m => [m.index, m.reason]));
-  state.custom.push({ id: 'c' + Date.now(), label: data.label || text.slice(0, 12), matches });
+  state.custom.push({ id: 'c' + Date.now(), label: shorten(data.label || text), matches });
   input.value = '';
-  btn.disabled = false; btn.textContent = '加入画像';
+  btn.disabled = false; btn.textContent = 'Add to profile';
   renderChips(); update();
-  toast(matches.size ? `新画像挡下了 ${matches.size} 个视频` : '这一屏里没有和它相关的内容');
+  toast(matches.size ? `Your new profile blocked ${matches.size} video${matches.size > 1 ? 's' : ''}` : 'Nothing on this screen matches it');
 }
 
-// 离线兜底：关键词 + 标题字符重叠
+// Offline fallback: keyword hints → trap categories
 function mockMatch(text) {
-  const hits = Object.entries(TRAPS).filter(([, t]) => t.kw.some(k => text.includes(k)) || [...t.short].filter(c => text.includes(c)).length >= 2);
-  const hint = { 吵: 'rage', 骂: 'rage', 政治: 'rage', 愤怒: 'rage', 熬夜: 'binge', 深夜: 'binge', 凌晨: 'binge', 刷: 'binge', 八卦: 'drama', 瓜: 'drama', 焦虑: 'envy', 比较: 'envy', 钱: 'envy', 速成: 'fastsci', 浅: 'fastsci', 标题: 'bait' };
-  const cats = new Set(hits.map(([k]) => k));
-  Object.entries(hint).forEach(([w, k]) => text.includes(w) && cats.add(k));
+  const t = text.toLowerCase();
+  const hint = {
+    argu: 'rage', angry: 'rage', outrage: 'rage', politic: 'rage', fight: 'rage', yell: 'rage',
+    night: 'binge', '2 am': 'binge', scroll: 'binge', binge: 'binge', sleep: 'binge', autoplay: 'binge',
+    gossip: 'drama', celebrit: 'drama', drama: 'drama',
+    envy: 'envy', compar: 'envy', money: 'envy', rich: 'envy', anxious: 'envy',
+    shallow: 'fastsci', minute: 'fastsci', quick: 'fastsci', 'pretend': 'fastsci',
+    clickbait: 'bait', title: 'bait', thumbnail: 'bait',
+  };
+  const cats = new Set(Object.entries(hint).filter(([w]) => t.includes(w)).map(([, k]) => k));
+  Object.entries(TRAPS).forEach(([k, def]) => def.kw.some(w => t.includes(w)) && cats.add(k));
   if (!cats.size) cats.add('binge');
   const matches = FEED.map((v, index) => ({ v, index })).filter(({ v }) => cats.has(v.trap))
-    .map(({ v, index }) => ({ index, reason: `这条和「${text.slice(0, 14)}」很接近：它属于${TRAPS[v.trap].short}，你看完通常不会更接近想成为的自己。` }));
-  return { label: text.replace(/^(一个|一位)?/, '').slice(0, 12), matches };
+    .map(({ v, index }) => ({ index, reason: `This is ${TRAPS[v.trap].short.toLowerCase()} — close to "${text.slice(0, 40)}". You rarely finish it feeling more like who you want to be.` }));
+  const label = /^someone|^a person/i.test(text) ? text : 'Someone ' + text.replace(/^(i don'?t want to be|a|an)\s+/i, '');
+  return { label: shorten(label), matches };
+}
+
+// Capitalize and cut on a word boundary so chips never end mid-word
+function shorten(label, max = 44) {
+  let s = label.trim().replace(/^./, c => c.toUpperCase());
+  if (s.length > max) s = s.slice(0, max).replace(/\s+\S*$/, '') + '…';
+  return s;
 }
