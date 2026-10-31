@@ -129,8 +129,8 @@ const slidesAudit = async (page, reveal) => {
 };
 SHOTS['slides-flipped'] = [
   { file: 'cover-1.jpg', url: 'slides-flipped/', selector: 'body', wait: 4200 },
-  { file: 'cover-2.jpg', url: 'slides-flipped/', selector: '#demo-reverse .gw-window', offset: -20, wait: 600, prepare: page => slidesAudit(page, true) },
-  { file: 'reverse.jpg', url: 'slides-flipped/', selector: '#demo-reverse .gw-window', offset: -20, wait: 600, prepare: page => slidesAudit(page, false) },
+  { file: 'cover-2.jpg', url: 'slides-flipped/', selector: '#demo-reverse .gw-window', offset: -20, wait: 2800, /* let the toast fade */ prepare: page => slidesAudit(page, true) },
+  { file: 'reverse.jpg', url: 'slides-flipped/', selector: '#demo-reverse .gw-window', offset: -20, wait: 2800, /* let the toast fade */ prepare: page => slidesAudit(page, false) },
   {
     file: 'attention.jpg', url: 'slides-flipped/', selector: '#demo-attention .gw-window', offset: -20, wait: 800,
     prepare: async page => { await page.evaluate(() => document.querySelector('#at-sample').click()); },
