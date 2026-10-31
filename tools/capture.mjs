@@ -148,6 +148,37 @@ SHOTS['slides-flipped'] = [
   },
 ];
 
+// Gmail: most shots start from a finished scan with the bank email open
+const gmailScan = async page => {
+  await page.evaluate(() => document.querySelector('#scan-btn').click());
+  await sleep(9000);
+  await page.evaluate(() => document.querySelector('.row[data-id="m2"]').click());
+  await sleep(400);
+};
+SHOTS['gmail-looped-in'] = [
+  { file: 'cover-1.jpg', url: 'gmail-looped-in/', selector: 'body', wait: 4500 },
+  { file: 'cover-2.jpg', url: 'gmail-looped-in/', selector: '#demo-protect .protect-stage', offset: -20, wait: 3000, prepare: gmailScan },
+  {
+    file: 'consent.jpg', url: 'gmail-looped-in/', selector: '#demo-consent .consent-stage', offset: -40, wait: 3000,
+    prepare: async page => {
+      await page.evaluate(() => document.querySelector('#c-invite').click()); await sleep(400);
+      await page.evaluate(() => document.querySelector('#c-accept').click());
+    },
+  },
+  {
+    file: 'pause.jpg', url: 'gmail-looped-in/', selector: '#demo-protect .protect-stage', offset: -20, wait: 3000,
+    prepare: async page => { await gmailScan(page); await page.evaluate(() => document.querySelector('.mail-link').click()); },
+  },
+  {
+    file: 'guardian.jpg', url: 'gmail-looped-in/', selector: '#demo-protect .protect-stage', offset: -20, wait: 3000,
+    prepare: async page => { await gmailScan(page); await page.evaluate(() => [...document.querySelectorAll('.notif.high')].pop().click()); },
+  },
+  {
+    file: 'thread.jpg', url: 'gmail-looped-in/', selector: '#demo-thread .gw-window', offset: -20, wait: 800,
+    prepare: async page => { await page.evaluate(() => document.querySelector('#th-play').click()); await sleep(7000); },
+  },
+];
+
 const ids = process.argv.slice(2).length ? process.argv.slice(2) : Object.keys(SHOTS);
 const browser = await puppeteer.launch({ executablePath: CHROME, headless: true, args: ['--hide-scrollbars'] });
 try {

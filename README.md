@@ -10,6 +10,7 @@ A series of interactive product proposals for Google products, built as live, cl
 | 02 | Google Meet | **Rehearsed** — move the post-mortem before the meeting | [`meet-rehearsed/`](meet-rehearsed/) |
 | 03 | Google Calendar | **Priced** — every meeting shows what it really costs | [`calendar-priced/`](calendar-priced/) |
 | 04 | Google Slides | **Flipped** — the AI gives your talk, you find what it got wrong | [`slides-flipped/`](slides-flipped/) |
+| 05 | Gmail | **Looped In** — when a scam reaches Mom, her daughter hears about the risk, never the email | [`gmail-looped-in/`](gmail-looped-in/) |
 
 ## Run locally
 

@@ -10,6 +10,7 @@
 | 02 | Google Meet | **Rehearsed**：把复盘前移到会前 | [`meet-rehearsed/`](meet-rehearsed/) |
 | 03 | Google Calendar | **Priced**：让每场会议显示它真实的成本 | [`calendar-priced/`](calendar-priced/) |
 | 04 | Google Slides | **Flipped**：AI 先讲，你来挑错 | [`slides-flipped/`](slides-flipped/) |
+| 05 | Gmail | **Looped In**：家人防诈守护，只传风险，不传邮件 | [`gmail-looped-in/`](gmail-looped-in/) |
 
 ## 本地运行
 

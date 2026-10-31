@@ -228,4 +228,53 @@ export const PROJECTS = [
     ],
     shots: ['assets/slides-flipped/cover-1.jpg', 'assets/slides-flipped/cover-2.jpg'],
   },
+  {
+    id: 'gmail-looped-in',
+    group: 'proposals',
+    product: 'Gmail',
+    productColor: '#ea4335',
+    kind: 'Safety',
+    date: '2026-11',
+    title: 'Looped In',
+    tagline: 'When a scam reaches Mom, her daughter hears about the risk — never the email.',
+    idea: 'Every Google scam protection assumes you can judge the danger yourself. Looped In lets an older adult choose one family member to get a heads-up on high-risk scams — sharing the risk, never the content, with her in control.',
+    demo: 'gmail-looped-in/',
+    tags: ['Two-way consent', 'Three-layer detection', 'Risk, not content', 'Pause before acting', 'Conversation-level risk', 'Gemini API', 'Safe Browsing test pages'],
+    problem: 'People over 60 reported $3.4B in fraud losses in 2023, up 11% from the year before, with an average loss of $33,915 per victim; investment scams cost the most at $1.2B (FBI IC3, 2023 Elder Fraud Report). Children can\'t read their parents\' email, parents don\'t want to be watched, and the costliest scams are slow relationships where no single message looks wrong.',
+    shift: { from: 'protect(me)', to: 'protect(each_other, consent=true)' },
+    features: [
+      {
+        name: 'Two-way consent',
+        text: 'Mom turns it on and picks one person. She sees every alert they receive and can switch it off anytime; the guardian can\'t turn it back on, change settings, or read her mail.',
+        shots: ['assets/gmail-looped-in/consent.jpg'],
+      },
+      {
+        name: 'Three layers, a pause, and a heads-up',
+        text: 'Rules clear most mail in microseconds, link reputation clears more, and only what\'s left reaches Gemini to read intent. Medium risks stay with Mom; high risks also reach her guardian as one sentence about the risk and the sender\'s domain. When Mom clicks a risky link, a gentle "Let\'s pause" offers to call her daughter first.',
+        shots: ['assets/gmail-looped-in/pause.jpg', 'assets/gmail-looped-in/guardian.jpg'],
+      },
+      {
+        name: 'Conversation-level detection',
+        text: 'A six-week "friendship" moves from contact to trust, isolation, an investment pitch and finally a wire request. No message scores above 32% on its own; the trajectory crosses the guardian threshold in week five — a week before the $8,000 ask.',
+        shots: ['assets/gmail-looped-in/thread.jpg'],
+      },
+    ],
+    metric: { from: 'Scams blocked', to: 'Family stepped in', note: 'High-risk alerts where the guardian engaged within 24 hours; guardrails: false-alarm rate and turn-off rate' },
+    business: [
+      'One protection relationship connects two generations to Gmail — a reason for both to stay.',
+      'Fewer losses and less shame: many victims hesitate before paying, and one nudge at that moment can change the outcome.',
+      'Designed for the hard cases: the guardian never sees content and can\'t stop Mom from turning it off, in case the risk is the family member.',
+    ],
+    tech: [
+      'Layer 1 rules flag display-name and domain mismatches, lookalike domains (digit swaps like micros0ft) and high-risk asks such as gift cards, codes and remote-access software.',
+      'Layer 2 checks link reputation; the demo uses Google\'s official Safe Browsing test pages instead of real phishing links.',
+      'Layer 3 sends only flagged mail to Gemini, which returns risk, tactics, phrases to highlight, and a content-free sentence for the guardian.',
+      'A trajectory model scores conversation stages — trust, isolation, pitch, ask — so no single message has to look like a scam.',
+    ],
+    limits: [
+      'Production would read mail through the Gmail API with restricted scopes and push alerts via Firebase; the demo simulates the inbox and the guardian\'s phone.',
+      'The conversation model is keyword-staged for the demo; a real system would ask Gemini to classify each stage.',
+    ],
+    shots: ['assets/gmail-looped-in/cover-1.jpg', 'assets/gmail-looped-in/cover-2.jpg'],
+  },
 ];
