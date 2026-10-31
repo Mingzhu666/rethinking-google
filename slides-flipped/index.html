@@ -1,0 +1,202 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Flipped for Google Slides — AI gives your talk, you find what it got wrong</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;700&family=Google+Sans+Text:wght@400;500&family=Roboto:wght@400;500;700&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="css/shell.css" />
+<link rel="stylesheet" href="css/app.css" />
+</head>
+<body>
+
+<header class="topbar">
+  <a class="brand" href="#hero"><span class="slides-logo"></span>Flipped <em>for Google Slides</em></a>
+  <nav class="chapters" aria-label="Chapters">
+    <a href="#problem">00 Problem</a>
+    <a href="#ch-reverse">01 Reverse rehearsal</a>
+    <a href="#ch-attention">02 Attention replay</a>
+    <a href="#ch-plan">03 Plan</a>
+    <a href="#ch-metric">04 New metric</a>
+  </nav>
+  <button class="pill-btn" id="open-settings" aria-label="Data sources">
+    <span class="status-dot" id="global-status"></span><span id="global-status-text">Data sources</span>
+  </button>
+</header>
+
+<main>
+<!-- HERO -->
+<section id="hero" class="stop hero">
+  <div class="hero-inner">
+    <p class="kicker reveal">A product proposal for Google Slides · 2026</p>
+    <h1 class="hero-title reveal">The AI gives your talk.<br/><span class="calm">You</span> find what it got wrong.</h1>
+    <h2 class="hero-sub reveal" style="--d:.8s">If you can catch its mistakes, you actually own the deck.</h2>
+    <div class="hero-demo reveal" style="--d:1.1s">
+      <div class="hd-slide" id="hero-slide"></div>
+      <div class="hd-talk">
+        <small><span class="spark"></span>Gemini is presenting slide 4</small>
+        <p>In a six-week beta, formula entry got 2.3 times faster. <span class="hd-err">Over sixty percent of suggestions were accepted.</span></p>
+        <span class="hd-flag">✗ Wrong — the slide says 41%</span>
+      </div>
+    </div>
+  </div>
+  <div class="scroll-cue">Scroll · or press <kbd>→</kbd> to begin</div>
+</section>
+
+<!-- PROBLEM -->
+<section id="problem" class="stop chapter">
+  <p class="kicker reveal">The problem</p>
+  <p class="lede reveal">Gemini can now build your deck in a minute. <span class="trap">Understanding it still takes you.</span></p>
+  <p class="lede small reveal">Rehearsal tools today listen to you and grade you — pace, filler words, eye contact. They never test the harder thing: <b>do you know what each slide is supposed to say?</b> And their feedback is a score at the end, not a moment you can go back to.</p>
+</section>
+
+<section id="objective" class="stop chapter">
+  <p class="kicker reveal">Insight: flip who speaks, and replay who listens</p>
+  <div class="objective reveal">
+    <div class="obj-line old"><span class="kw">you</span> speak → AI grades</div>
+    <div class="obj-line new"><span class="kw">AI</span> speaks → you audit → the room replays</div>
+  </div>
+  <div class="trio reveal">
+    <a href="#ch-reverse" class="trio-card"><span>01</span><h3>Reverse rehearsal</h3><p>Catch what the AI got wrong, skipped, or said unlike you.</p></a>
+    <a href="#ch-attention" class="trio-card"><span>02</span><h3>Attention replay</h3><p>Scrub through your run-through as the audience heard it.</p></a>
+    <a href="#ch-plan" class="trio-card"><span>03</span><h3>Rehearsal plan</h3><p>Practice only the slides that need it.</p></a>
+  </div>
+</section>
+
+<!-- 01 REVERSE REHEARSAL -->
+<section id="ch-reverse" class="stop chapter chapter-intro">
+  <span class="ch-no">01</span>
+  <h2 class="ch-title reveal">Don't repeat the talk. <span class="calm">Audit it.</span></h2>
+  <p class="lede small reveal">Gemini presents your deck — out loud if you like — with six problems hidden in it: a wrong number, a changed date, a skipped point, a line that sounds nothing like you. <b>Every one you miss marks a slide you don't own yet.</b></p>
+</section>
+
+<section id="demo-reverse" class="stop demo-stage">
+  <div class="gw-window slides-window">
+    <div class="sl-top">
+      <span class="slides-logo big"></span>
+      <div class="gw-title"><b>Smart Compose for Sheets — launch review</b><small>Reverse rehearsal · click a sentence to flag it, click a bullet the AI skipped</small></div>
+      <span class="src-badge" id="rv-src"></span>
+      <button class="gw-btn small" id="rv-regen">↻ New talk with Gemini</button>
+      <button class="gw-btn small" id="rv-reset">Reset</button>
+    </div>
+    <div class="sl-body">
+      <aside class="strip" id="rv-strip"></aside>
+      <div class="canvas">
+        <div class="stage" id="rv-slide"></div>
+        <div class="canvas-nav"><button class="icon-btn" id="rv-prev" aria-label="Previous slide">‹</button><span id="rv-pos"></span><button class="icon-btn" id="rv-next" aria-label="Next slide">›</button></div>
+      </div>
+      <div class="talk-pane" id="rv-talk-box">
+        <div class="talk-head"><span class="spark"></span><b>Gemini's talk for this slide</b></div>
+        <p class="talk" id="rv-talk"></p>
+        <div class="talk-actions">
+          <button class="gw-btn" id="rv-play">▶ Play the AI's talk</button>
+          <span class="count" id="rv-count">0 flags</span>
+          <button class="gw-btn primary" id="rv-reveal">Reveal answers</button>
+        </div>
+      </div>
+    </div>
+    <div class="rv-result" id="rv-result" hidden></div>
+  </div>
+</section>
+
+<!-- 02 ATTENTION REPLAY -->
+<section id="ch-attention" class="stop chapter chapter-intro">
+  <span class="ch-no">02</span>
+  <h2 class="ch-title reveal">Replay your talk <span class="calm">the way the room heard it.</span></h2>
+  <p class="lede small reveal">After a run-through, a simulated audience attention curve shows where people drifted, what confused them, and which line they'll repeat later. <b>Drag the timeline like game film</b> — every dip comes with the reason.</p>
+</section>
+
+<section id="demo-attention" class="stop demo-stage">
+  <div class="gw-window attention-window">
+    <div class="sl-top">
+      <span class="slides-logo big"></span>
+      <div class="gw-title"><b>Audience attention replay</b><small id="at-label">Record a run-through or use the sample</small></div>
+      <button class="gw-btn small" id="at-record">● Record your run-through</button>
+      <button class="gw-btn small primary" id="at-sample">Use the sample run-through</button>
+    </div>
+    <div class="at-rec" id="at-rec" hidden><div class="rec-slide" id="at-rec-slide"></div><p><span class="rec-dot"></span>Recording. Present the slide out loud, press <kbd>→</kbd> for the next one. Click Stop when you're done.</p></div>
+    <div class="at-empty" id="at-empty">Speech is transcribed in your browser. Nothing is uploaded.</div>
+    <div class="at-stage" id="at-stage" hidden>
+      <div class="at-top">
+        <div class="at-now">
+          <div class="at-slide" id="at-slide"></div>
+          <div class="at-stats">
+            <div><small>Time</small><b id="at-time">0:00</b></div>
+            <div><small>Attention</small><b id="at-att">—</b></div>
+            <div><small>Words / min</small><b id="at-wpm">—</b></div>
+          </div>
+        </div>
+        <div class="at-right">
+          <div class="at-note" id="at-note"></div>
+          <p class="at-words" id="at-words"></p>
+        </div>
+      </div>
+      <div class="at-chart-wrap">
+        <div class="at-chart-head"><b>Simulated audience attention</b><button class="gw-btn small" id="at-play">▶ Replay</button><span class="at-legend"><i class="lg drift">!</i>drifted <i class="lg confusion">?</i>confused <i class="lg memorable">★</i>memorable</span></div>
+        <div class="at-chart" id="at-chart"></div>
+        <div class="at-slides" id="at-slides"></div>
+        <div class="at-axis" id="at-axis"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 03 PLAN -->
+<section id="ch-plan" class="stop chapter chapter-intro">
+  <span class="ch-no">03</span>
+  <h2 class="ch-title reveal">Practice <span class="calm">only what needs it.</span></h2>
+  <p class="lede small reveal">The slides you didn't own and the moments the room drifted are usually the same slides. The plan puts them first — and tells you which ones you can stop rehearsing.</p>
+</section>
+
+<section id="demo-plan" class="stop demo-stage">
+  <div class="gw-window plan-window">
+    <div class="sl-top"><span class="slides-logo big"></span><div class="gw-title"><b>Your next rehearsal</b><small>Combines the reverse rehearsal and the attention replay</small></div><span class="src-badge" id="plan-src"></span><div class="plan-status" id="plan-status"></div></div>
+    <div class="plan" id="plan"></div>
+  </div>
+</section>
+
+<!-- 04 NEW METRIC -->
+<section id="ch-metric" class="stop chapter">
+  <span class="ch-no">04</span>
+  <h2 class="ch-title reveal">A new north star</h2>
+  <div class="metric-swap reveal">
+    <div class="m old"><small>Today</small><b>Decks created</b><span>How much Gemini helped make slides</span></div>
+    <div class="arrow">→</div>
+    <div class="m new"><small>Flipped</small><b>Slides owned</b><span>Share of slides a presenter can defend before they present</span></div>
+  </div>
+  <div class="why-grid reveal">
+    <div><h4>"Isn't the AI supposed to save me work?"</h4><p>It still builds the deck. Flipped makes sure the minute it saved doesn't cost you the room — ten minutes of auditing replaces an hour of reading your slides aloud to a wall.</p></div>
+    <div><h4>The business case</h4><p>Generated decks create a new risk: presenters who don't understand their own slides. Flipped turns Gemini in Slides from a shortcut into a coach — a reason for sales, education and enablement teams to pay for it.</p></div>
+    <div><h4>Privacy by design</h4><p>Speech is transcribed in the browser. The attention curve is a model of a room, not a recording of one — no audience data is collected.</p></div>
+    <div><h4>How we'd prove it</h4><p>Measure slides owned before and after, presenter confidence, and audience recall in a follow-up quiz — not minutes spent rehearsing.</p></div>
+  </div>
+</section>
+
+<section id="end" class="stop chapter end">
+  <h2 class="end-title reveal">Own every slide<br/>before you present it.</h2>
+  <p class="credits reveal">Built with Gemini API · Web Speech API (synthesis and recognition) · an audience attention model</p>
+</section>
+</main>
+
+<dialog id="settings" class="settings">
+  <form method="dialog">
+    <h3>Data sources</h3>
+    <p class="muted">Keys are stored only in this browser and shared with the other demos on this address. Without a key the demo uses the sample talk and sample coaching.</p>
+    <label>Gemini API key<input id="k-gm" autocomplete="off" placeholder="AIza…" /></label>
+    <label>Gemini model<input id="k-model" autocomplete="off" placeholder="gemini-3.5-flash-lite (default)" /></label>
+    <label class="check"><input type="checkbox" id="k-offline" /> Safe demo mode: use cache and sample data only</label>
+    <ul class="src-list" id="src-list"></ul>
+    <div class="row">
+      <button value="cancel" class="ghost-btn">Close</button>
+      <button id="clear-cache" type="button" class="ghost-btn">Clear cache</button>
+      <button id="save-keys" value="default" class="pill-btn">Save</button>
+    </div>
+  </form>
+</dialog>
+
+<div class="toast" id="toast"></div>
+<script type="module" src="js/main.js"></script>
+</body>
+</html>

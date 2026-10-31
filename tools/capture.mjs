@@ -111,6 +111,43 @@ SHOTS['calendar-priced'] = [
   },
 ];
 
+// Slides: flag a few lines, then reveal, so the shots show a realistic half-caught audit
+const slidesAudit = async (page, reveal) => {
+  const flag = async (slide, id, type) => {
+    await page.evaluate(i => document.querySelectorAll('#rv-strip .thumb')[i].click(), slide); await sleep(150);
+    await page.evaluate(x => document.querySelector(`.sent[data-id="${x}"]`).click(), id); await sleep(100);
+    await page.evaluate(t => document.querySelector(`.flag-menu button[data-t="${t}"]`).click(), type); await sleep(100);
+  };
+  await flag(1, 't2b', 'voice');
+  await flag(3, 't4b', 'wrong');
+  await page.evaluate(() => document.querySelectorAll('#rv-strip .thumb')[2].click()); await sleep(150);
+  await page.evaluate(() => document.querySelector('#rv-slide [data-b="s3b3"]').click()); await sleep(300);
+  if (reveal) {
+    await page.evaluate(() => document.querySelectorAll('#rv-strip .thumb')[4].click()); await sleep(150);
+    await page.evaluate(() => document.querySelector('#rv-reveal').click()); await sleep(600);
+  }
+};
+SHOTS['slides-flipped'] = [
+  { file: 'cover-1.jpg', url: 'slides-flipped/', selector: 'body', wait: 4200 },
+  { file: 'cover-2.jpg', url: 'slides-flipped/', selector: '#demo-reverse .gw-window', offset: -20, wait: 600, prepare: page => slidesAudit(page, true) },
+  { file: 'reverse.jpg', url: 'slides-flipped/', selector: '#demo-reverse .gw-window', offset: -20, wait: 600, prepare: page => slidesAudit(page, false) },
+  {
+    file: 'attention.jpg', url: 'slides-flipped/', selector: '#demo-attention .gw-window', offset: -20, wait: 800,
+    prepare: async page => { await page.evaluate(() => document.querySelector('#at-sample').click()); },
+  },
+  {
+    file: 'plan.jpg', url: 'slides-flipped/', selector: '#demo-plan .gw-window', offset: -20, wait: 1200,
+    prepare: async page => {
+      await page.evaluate(() => { document.documentElement.style.scrollBehavior = 'auto'; document.querySelector('#demo-reverse').scrollIntoView(); });
+      await sleep(1200);
+      await slidesAudit(page, true);
+      await page.evaluate(() => document.querySelector('#at-sample').click());
+      await sleep(500);
+      await page.evaluate(() => { const el = document.querySelector('#demo-plan .gw-window'); window.scrollTo(0, el.getBoundingClientRect().top + window.scrollY - 84); });
+    },
+  },
+];
+
 const ids = process.argv.slice(2).length ? process.argv.slice(2) : Object.keys(SHOTS);
 const browser = await puppeteer.launch({ executablePath: CHROME, headless: true, args: ['--hide-scrollbars'] });
 try {

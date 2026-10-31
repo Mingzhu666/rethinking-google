@@ -179,4 +179,53 @@ export const PROJECTS = [
     ],
     shots: ['assets/calendar-priced/cover-1.jpg', 'assets/calendar-priced/cover-2.jpg'],
   },
+  {
+    id: 'slides-flipped',
+    group: 'proposals',
+    product: 'Google Slides',
+    productColor: '#f4b400',
+    kind: 'Productivity',
+    date: '2026-11',
+    title: 'Flipped',
+    tagline: 'The AI gives your talk. You find what it got wrong.',
+    idea: 'Flip rehearsal: instead of the presenter speaking and the AI grading, the AI speaks and the presenter audits it. Every planted mistake you miss marks a slide you don\'t own — then replay your own run-through as the audience heard it.',
+    demo: 'slides-flipped/',
+    tags: ['Reverse rehearsal', 'Ownership map', 'Attention replay', 'Rehearsal plan', 'Gemini API', 'Web Speech API'],
+    problem: 'Gemini can build a deck in a minute, but understanding it still takes the presenter. Rehearsal tools listen to you and grade pace and filler words; they never test whether you know what each slide is supposed to say, and their feedback is a score at the end rather than a moment you can go back to.',
+    shift: { from: 'you speak → AI grades', to: 'AI speaks → you audit → the room replays' },
+    features: [
+      {
+        name: 'Reverse rehearsal',
+        text: 'Gemini presents the deck — read it or have it spoken aloud — with six problems hidden in the talk: a wrong number, a changed date, a skipped point, a line that sounds nothing like you. Flag sentences and skipped bullets, then reveal: each miss marks a slide you don\'t own yet.',
+        shots: ['assets/slides-flipped/reverse.jpg'],
+      },
+      {
+        name: 'Audience attention replay',
+        text: 'Record a run-through in the browser and get a simulated attention curve: it decays with time, climbs at slide changes, stories and comparisons, and falls with rushed delivery, filler words and unexplained jargon. Drag the timeline like game film to see the slide, the words and the reason at every moment.',
+        shots: ['assets/slides-flipped/attention.jpg'],
+      },
+      {
+        name: 'Next rehearsal plan',
+        text: 'The slides you didn\'t own and the moments the room drifted are usually the same slides. The plan ranks them, says why, and lists the slides you can stop rehearsing.',
+        shots: ['assets/slides-flipped/plan.jpg'],
+      },
+    ],
+    metric: { from: 'Decks created', to: 'Slides owned', note: 'Share of slides a presenter can defend before they present' },
+    business: [
+      'Generated decks create a new risk — presenters who don\'t understand their own slides. Flipped turns Gemini in Slides from a shortcut into a coach.',
+      'A reason for sales, education and enablement teams to pay for Gemini in Workspace: measurable presenter readiness.',
+      'Privacy by design: speech is transcribed in the browser, and the attention curve is a model of a room, not a recording of one.',
+    ],
+    tech: [
+      'Gemini writes a fresh talk with six annotated planted problems; a validator falls back to the sample talk if the structure is wrong.',
+      'Web Speech API synthesis reads the talk aloud with sentence highlighting; recognition captures the run-through, segmented by slide with the arrow key.',
+      'An attention model samples every second from speech rate, filler words, jargon, stories and comparisons, then smooths the curve for an SVG timeline you can scrub.',
+      'The plan combines ownership and attention per slide; Gemini writes the coach\'s note.',
+    ],
+    limits: [
+      'The attention curve is a heuristic model, not measured audience data; it is a prompt for reflection rather than a prediction.',
+      'Recording relies on the browser\'s speech recognition, which is Chrome-only and English-only in this demo.',
+    ],
+    shots: ['assets/slides-flipped/cover-1.jpg', 'assets/slides-flipped/cover-2.jpg'],
+  },
 ];

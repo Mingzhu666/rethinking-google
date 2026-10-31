@@ -9,6 +9,7 @@
 | 01 | YouTube | **Unhooked**：把推荐目标从"最大化观看"改为"最小化后悔" | [`youtube-unhooked/`](youtube-unhooked/) |
 | 02 | Google Meet | **Rehearsed**：把复盘前移到会前 | [`meet-rehearsed/`](meet-rehearsed/) |
 | 03 | Google Calendar | **Priced**：让每场会议显示它真实的成本 | [`calendar-priced/`](calendar-priced/) |
+| 04 | Google Slides | **Flipped**：AI 先讲，你来挑错 | [`slides-flipped/`](slides-flipped/) |
 
 ## 本地运行
 
