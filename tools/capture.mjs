@@ -75,6 +75,42 @@ const SHOTS = {
   ],
 };
 
+// Calendar: shots run after a few clicks, so share the setup
+const calCosts = async page => { await page.evaluate(() => document.querySelector('#cost-toggle').click()); await sleep(900); };
+SHOTS['calendar-priced'] = [
+  { file: 'cover-1.jpg', url: 'calendar-priced/', selector: 'body', wait: 3000 },
+  { file: 'cover-2.jpg', url: 'calendar-priced/', selector: '#cal-window', offset: -20, wait: 800, prepare: calCosts },
+  {
+    file: 'price-detail.jpg', url: 'calendar-priced/', selector: '#cal-window', offset: -20, wait: 800,
+    prepare: async page => { await calCosts(page); await page.evaluate(() => document.querySelector('[data-id="standup-0"]').click()); },
+  },
+  {
+    file: 'create.jpg', url: 'calendar-priced/', selector: '#cal-window', offset: -20, wait: 1500,
+    prepare: async page => {
+      await calCosts(page);
+      await page.evaluate(() => { document.querySelector('#create-btn').click(); document.querySelector('#c-example').click(); document.querySelector('#c-check').click(); });
+    },
+  },
+  {
+    file: 'value-check.jpg', url: 'calendar-priced/', selector: '#demo-veto .gw-window', offset: -20, wait: 800,
+    prepare: async page => {
+      await page.evaluate(() => document.querySelector('#veto-send').click());
+      await sleep(5500);
+      await page.evaluate(() => document.querySelector('.ph-opt[data-v="notes"]').click());
+    },
+  },
+  {
+    file: 'receipt.jpg', url: 'calendar-priced/', selector: '#receipt', offset: -10, wait: 1000,
+    prepare: async page => {
+      await page.evaluate(() => document.querySelector('#veto-send').click());
+      await sleep(5500);
+      await page.evaluate(() => document.querySelector('#veto-cancel').click());
+      await sleep(800);
+      await page.evaluate(() => { const el = document.querySelector('#receipt'); window.scrollTo(0, el.getBoundingClientRect().top + window.scrollY - 74); });
+    },
+  },
+];
+
 const ids = process.argv.slice(2).length ? process.argv.slice(2) : Object.keys(SHOTS);
 const browser = await puppeteer.launch({ executablePath: CHROME, headless: true, args: ['--hide-scrollbars'] });
 try {

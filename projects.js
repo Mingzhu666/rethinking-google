@@ -125,4 +125,58 @@ export const PROJECTS = [
     ],
     shots: ['assets/meet-rehearsed/cover-1.jpg', 'assets/meet-rehearsed/cover-2.jpg'],
   },
+  {
+    id: 'calendar-priced',
+    group: 'proposals',
+    product: 'Google Calendar',
+    productColor: '#4285f4',
+    kind: 'Productivity',
+    date: '2026-11',
+    title: 'Priced',
+    tagline: 'Every meeting shows what it really costs.',
+    idea: 'A calendar invite is free to send and expensive to receive. Show the organizer the price — people time plus the focus time it shatters — and give guests an anonymous way to say "I don\'t need to be there."',
+    demo: 'calendar-priced/',
+    tags: ['True cost', 'Fragmentation cost', 'Reason threshold', 'Anonymous value check', 'Weekly receipt', 'Gemini API', '.ics import'],
+    problem: 'Meetings are an externality: the person who sends the invite pays nothing, everyone who accepts it pays in hours. A 15-minute standup at 9:30 costs $149 of people time — and $829 of shattered mornings, because it cuts everyone\'s first two-hour focus block into pieces too short for deep work.',
+    shift: { from: 'calendar.show(time)', to: 'calendar.show(time, cost, focus_lost)' },
+    features: [
+      {
+        name: 'Price tags and true cost',
+        text: 'One switch puts a price on every meeting: guests × duration × an admin-set hourly cost, plus a fragmentation cost for the 90-minute focus blocks it breaks. Open any meeting to see whose focus time it destroys, before and after. Drop an exported .ics to price your own last four weeks, in the browser.',
+        shots: ['assets/calendar-priced/price-detail.jpg'],
+      },
+      {
+        name: 'Reason threshold with a Gemini check',
+        text: 'Creating an invite shows a live cost meter. Above $500 the organizer must write why it needs to be a meeting; Gemini reads the reason and suggests the cheapest format that still works — shorter, smaller, or a doc — with the saving for each.',
+        shots: ['assets/calendar-priced/create.jpg'],
+      },
+      {
+        name: 'Anonymous value check',
+        text: 'Guests rate a recurring meeting privately: must attend, can delegate, notes are enough, should be cancelled. Results unlock only after three answers and show a distribution, never names. When most say notes are enough, Calendar suggests cancelling and Gemini drafts the async update.',
+        shots: ['assets/calendar-priced/value-check.jpg'],
+      },
+      {
+        name: 'Weekly receipt',
+        text: 'Every Friday the team gets its meeting spend itemized like a till receipt — top meetings, the fragmentation surcharge, what value checks saved, and the focus hours left per person.',
+        shots: ['assets/calendar-priced/receipt.jpg'],
+      },
+    ],
+    metric: { from: 'Meetings scheduled', to: 'Focus hours protected', note: 'Deep-work hours per person per week, kept intact' },
+    business: [
+      'Meeting load is the top complaint in engagement surveys; admins who can show focus hours returned have a reason to stay on Workspace and buy Gemini for it.',
+      'Builds on Time Insights, which already shows time in meetings — Priced adds what that time is worth.',
+      'Privacy by design: costs use an org-average rate, never individual salaries; value checks are anonymous with a minimum of three answers.',
+    ],
+    tech: [
+      'A deterministic cost model computes people cost and fragmentation from each attendee\'s free gaps (a gap counts as focus time at 90+ minutes).',
+      'Gemini reviews the organizer\'s reason and drafts the async update that replaces a cancelled meeting.',
+      'A small RFC 5545 parser reads exported .ics files in the browser, expanding daily and weekly recurrences.',
+      'Calendar, value check and receipt share one state, so cancelling a meeting updates the week and the receipt live.',
+    ],
+    limits: [
+      'Fragmentation only sees meetings on the calendar; real focus time also depends on travel, lunch and personal blocks.',
+      'The .ics import expands daily and weekly recurrences only, and counts guests from the attendee list.',
+    ],
+    shots: ['assets/calendar-priced/cover-1.jpg', 'assets/calendar-priced/cover-2.jpg'],
+  },
 ];
